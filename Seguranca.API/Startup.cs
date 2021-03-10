@@ -25,8 +25,8 @@ namespace Seguranca.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Seguranca.API", Version = "v1" });
@@ -40,6 +40,8 @@ namespace Seguranca.API
             // injeção dependência Services
             services.AddScoped<IEventoRepository, EventoRepository>();
             services.AddScoped<IEventoService, EventoService>();
+            services.AddScoped<IFormularioRepository, FormularioRepository>();
+            services.AddScoped<IFormularioService, FormularioService>();
 
             //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers()

@@ -25,7 +25,8 @@ namespace Seguranca.Core.Persistence.Repositories
                     .AsNoTracking()
                     .Include(e => e.FormularioEvento)
                     .Include(e => e.RestricaoPerfil)
-                    .Include(e => e.RestricaoUsuario).ToListAsync();
+                    .Include(e => e.RestricaoUsuario)
+                    .ToListAsync();
          }
 
         public async Task<Evento> ObterAsync(int eventoId)
