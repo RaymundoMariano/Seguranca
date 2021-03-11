@@ -42,6 +42,8 @@ namespace Seguranca.API
             services.AddScoped<IEventoService, EventoService>();
             services.AddScoped<IFormularioRepository, FormularioRepository>();
             services.AddScoped<IFormularioService, FormularioService>();
+            services.AddScoped<IModuloRepository, ModuloRepository>();
+            services.AddScoped<IModuloService, ModuloService>();
 
             //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers()

@@ -26,9 +26,10 @@ namespace Seguranca.Core.Persistence.Repositories
                     .Include(f => f.FormularioEvento)
                         .ThenInclude(f => f.Evento)
                     .Include(f => f.ModuloFormulario)
+                        .ThenInclude(f => f.Modulo)
                     .Include(f => f.RestricaoPerfil)
                         .ThenInclude(f => f.Evento)
-                    .Include(e => e.RestricaoUsuario)
+                    .Include(f => f.RestricaoUsuario)
                         .ThenInclude(f => f.Evento)
                     .ToListAsync();
         }
@@ -40,11 +41,12 @@ namespace Seguranca.Core.Persistence.Repositories
                     .Include(f => f.FormularioEvento)
                         .ThenInclude(f => f.Evento)
                     .Include(f => f.ModuloFormulario)
+                        .ThenInclude(f => f.Modulo)
                     .Include(f => f.RestricaoPerfil)
                         .ThenInclude(f => f.Evento)
-                    .Include(e => e.RestricaoUsuario)
+                    .Include(f => f.RestricaoUsuario)
                         .ThenInclude(f => f.Evento)
-                    .FirstAsync(e => e.FormularioId == formularioId);
+                    .FirstAsync(f => f.FormularioId == formularioId);
         }
         #endregion
 
