@@ -46,7 +46,7 @@ namespace Seguranca.Core.Persistence.Repositories
                                 .ThenInclude(p => p.Formulario)
                                     .ThenInclude(p => p.ModuloFormulario)
                                         .ThenInclude(p => p.Modulo)
-                    .FirstAsync(e => e.PerfilId == perfilId);
+                    .FirstAsync(p => p.PerfilId == perfilId);
         }
         #endregion
 

@@ -46,6 +46,8 @@ namespace Seguranca.API
             services.AddScoped<IModuloService, ModuloService>();
             services.AddScoped<IPerfilRepository, PerfilRepository>();
             services.AddScoped<IPerfilService, PerfilService>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
 
             //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers()
