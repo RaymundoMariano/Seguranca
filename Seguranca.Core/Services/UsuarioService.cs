@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Acessorio.Util;
+using Microsoft.EntityFrameworkCore;
 using Seguranca.Core.Domain.Models;
 using Seguranca.Core.Domain.Repositories;
 using Seguranca.Core.Domain.Services;
@@ -48,6 +49,9 @@ namespace Seguranca.Core.Services
                 if (usuarios.Contains(usuario))
                     throw new ServiceException("Usuario já cadastrado - " + usuario.Nome);
 
+                if (!Validacao.EmailValido(usuario.Email))
+                    throw new ServiceException("Email inválido - " + usuario.Email);
+
                 _usuarioRepository.Insere(usuario);
                 await _usuarioRepository.UnitOfWork.SaveChangesAsync();
             }
@@ -62,7 +66,10 @@ namespace Seguranca.Core.Services
             try
             {
                 if (usuarioId != usuario.UsuarioId)
-                { throw new ServiceException(usuarioId + " Diferente " + usuario.UsuarioId); }
+                    throw new ServiceException(usuarioId + " Diferente " + usuario.UsuarioId);
+
+                if (!Validacao.EmailValido(usuario.Email))
+                    throw new ServiceException("Email inválido - " + usuario.Email);
 
                 _usuarioRepository.Update(usuario);
                 try { await _usuarioRepository.UnitOfWork.SaveChangesAsync(); }

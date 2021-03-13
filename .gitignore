@@ -71,3 +71,5 @@ Seguranca.API/obj/Debug/net5.0/Seguranca.API.TagHelpers.input.cache
 Seguranca.API/obj/Debug/net5.0/Seguranca.API.TagHelpers.output.cache
 Seguranca.API/obj/Debug/net5.0/Seguranca.API.Views.pdb
 Seguranca.API/Seguranca.API.csproj.user
+*.pdb
+*.CopyComplete
