@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Seguranca.Core.Domain.Models;
 using Seguranca.Core.Domain.Repositories;
 using System.Threading.Tasks;
 
 #nullable disable
-
 namespace Seguranca.Core.Persistence.Contexts
 {
     public partial class SegurancaContext : DbContext, IUnitOfWork
     {
-        public SegurancaContext()
+        public SegurancaContext() 
         {
         }
 
         public SegurancaContext(DbContextOptions<SegurancaContext> options)
             : base(options)
         {
+            new DbInitializer(this);
         }
 
         public virtual DbSet<Evento> Evento { get; set; }
@@ -53,11 +54,11 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.HasIndex(e => e.Nome, "IX_Evento")
                     .IsUnique();
 
-                entity.Property(e => e.Descricao).HasMaxLength(256);
+                entity.Property(e => e.Descricao).HasMaxLength(50);
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
-                    .HasMaxLength(128);
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Formulario>(entity =>
@@ -67,7 +68,7 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.HasIndex(e => e.Nome, "IX_Formulario")
                     .IsUnique();
 
-                entity.Property(e => e.Descricao).HasMaxLength(256);
+                entity.Property(e => e.Descricao).HasMaxLength(50);
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
@@ -101,7 +102,7 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.HasIndex(e => e.Nome, "IX_Modulo")
                     .IsUnique();
 
-                entity.Property(e => e.Descricao).HasMaxLength(256);
+                entity.Property(e => e.Descricao).HasMaxLength(50);
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
@@ -135,7 +136,7 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.HasIndex(e => e.Nome, "IX_Perfil")
                     .IsUnique();
 
-                entity.Property(e => e.Descricao).HasMaxLength(128);
+                entity.Property(e => e.Descricao).HasMaxLength(50);
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
