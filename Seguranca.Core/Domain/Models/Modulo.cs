@@ -4,7 +4,7 @@
 
 namespace Seguranca.Core.Domain.Models
 {
-    public partial class Modulo
+    public partial class Modulo : Entity
     {
         public Modulo()
         {
@@ -14,9 +14,7 @@ namespace Seguranca.Core.Domain.Models
             RestricaoUsuario = new HashSet<RestricaoUsuario>();
         }
 
-        public int ModuloId { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
+        public int ModuloId { get; set; }        
 
         public virtual ICollection<ModuloFormulario> ModuloFormulario { get; set; }
         public virtual ICollection<PerfilUsuario> PerfilUsuario { get; set; }

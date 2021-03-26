@@ -230,6 +230,9 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.HasIndex(e => e.Nome, "IX_Usuario")
                     .IsUnique();
 
+                entity.HasIndex(e => e.Email, "IX_Usuario_1")
+                    .IsUnique();
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -237,6 +240,10 @@ namespace Seguranca.Core.Persistence.Contexts
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Senha)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             OnModelCreatingPartial(modelBuilder);

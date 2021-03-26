@@ -4,7 +4,7 @@
 
 namespace Seguranca.Core.Domain.Models
 {
-    public partial class Evento
+    public partial class Evento : Entity
     {
         public Evento()
         {
@@ -14,9 +14,7 @@ namespace Seguranca.Core.Domain.Models
         }
 
         public int EventoId { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-
+        
         public virtual ICollection<FormularioEvento> FormularioEvento { get; set; }
         public virtual ICollection<RestricaoPerfil> RestricaoPerfil { get; set; }
         public virtual ICollection<RestricaoUsuario> RestricaoUsuario { get; set; }
