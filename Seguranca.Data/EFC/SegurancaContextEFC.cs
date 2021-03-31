@@ -1,18 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Seguranca.Core.Domain.Models;
-using Seguranca.Core.Domain.Repositories;
+using Seguranca.Domain.Contracts.Repositories;
+using Seguranca.Domain.Entities;
 using System.Threading.Tasks;
 
-#nullable disable
-namespace Seguranca.Core.Persistence.Contexts
+namespace Seguranca.Data.EFC
 {
-    public partial class SegurancaContext : DbContext, IUnitOfWork
+    public partial class SegurancaContextEFC : DbContext, IUnitOfWork
     {
-        public SegurancaContext() 
+        public SegurancaContextEFC()
         {
         }
 
-        public SegurancaContext(DbContextOptions<SegurancaContext> options)
+        public SegurancaContextEFC(DbContextOptions<SegurancaContextEFC> options)
             : base(options)
         {
             new DbInitializer(this);
@@ -28,7 +27,7 @@ namespace Seguranca.Core.Persistence.Contexts
         public virtual DbSet<RestricaoPerfil> RestricaoPerfil { get; set; }
         public virtual DbSet<RestricaoUsuario> RestricaoUsuario { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-
+        
         public Task<int> SaveChangesAsync()
         {
             return base.SaveChangesAsync();
@@ -36,10 +35,10 @@ namespace Seguranca.Core.Persistence.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                //optionsBuilder.UseSqlServer("Server=DESKTOP-S3R5UB7\\SQLEXPRESS;Database=DesBd_Seguranca;Trusted_Connection=True;");
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("Server=DESKTOP-S3R5UB7\\SQLEXPRESS;Database=DesBd_Seguranca;Trusted_Connection=True;");
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -247,7 +246,6 @@ namespace Seguranca.Core.Persistence.Contexts
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

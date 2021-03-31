@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Seguranca.Domain\Seguranca.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Acessorio.Util">
+      <HintPath>..\..\Acessorio\Acessorio.Util\bin\Debug\net5.0\Acessorio.Util.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

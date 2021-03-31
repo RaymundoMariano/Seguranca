@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Seguranca.Core.Domain.Models;
-using Seguranca.Core.Domain.Services;
-using Seguranca.Core.Persistence.Contexts;
+using Seguranca.Domain.Contracts.Services;
+using Seguranca.Domain.Entities;
 
 namespace Seguranca.API.Controllers
 {

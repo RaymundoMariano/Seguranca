@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Seguranca.Core.Domain.Repositories;
-using Seguranca.Core.Domain.Services;
-using Seguranca.Core.Persistence.Contexts;
-using Seguranca.Core.Persistence.Repositories;
-using Seguranca.Core.Services;
+using Seguranca.Data.EFC;
+using Seguranca.Data.EFC.Repositories;
+using Seguranca.Domain.Contracts.Repositories;
+using Seguranca.Domain.Contracts.Services;
+using Seguranca.Service;
 
 namespace Seguranca.API
 {
@@ -32,21 +32,21 @@ namespace Seguranca.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Seguranca.API", Version = "v1" });
             });
 
-            // injeção dependência DBContext			
-            services.AddDbContext<SegurancaContext>(options =>
+            // injeção dependência DBContext
+            services.AddDbContext<SegurancaContextEFC>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SegurancaConnection")));
-            
+
             // injeção dependência Services
-            services.AddScoped<IEventoRepository, EventoRepository>();
+            services.AddScoped<IEventoRepository, EventoRepositoryEFC>();
             services.AddScoped<IEventoService, EventoService>();
-            services.AddScoped<IFormularioRepository, FormularioRepository>();
+            services.AddScoped<IFormularioRepository, FormularioRepositoryEFC>();
             services.AddScoped<IFormularioService, FormularioService>();
-            services.AddScoped<IModuloRepository, ModuloRepository>();
+            services.AddScoped<IModuloRepository, ModuloRepositoryEFC>();
             services.AddScoped<IModuloService, ModuloService>();
-            services.AddScoped<IPerfilRepository, PerfilRepository>();
+            services.AddScoped<IPerfilRepository, PerfilRepositoryEFC>();
             services.AddScoped<IPerfilService, PerfilService>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepositoryEFC>();
             services.AddScoped<IUsuarioService, UsuarioService>();
 
             //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson

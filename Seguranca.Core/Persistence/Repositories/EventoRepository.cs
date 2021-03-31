@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Seguranca.Core.Persistence.Repositories
 {
-    public class EventoRepository : IEventoRepository
+    public class EventoRepository : IEventoRepository, IRepository
     {
         private readonly SegurancaContext _segurancaContext;
         public IUnitOfWork UnitOfWork => _segurancaContext;
@@ -65,6 +65,16 @@ namespace Seguranca.Core.Persistence.Repositories
         public bool Exists(int eventoId)
         {
             return _segurancaContext.Evento.Any(e => e.EventoId == eventoId);
+        }
+
+        public int SaveChanges()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<int> SaveChangesAsync()
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

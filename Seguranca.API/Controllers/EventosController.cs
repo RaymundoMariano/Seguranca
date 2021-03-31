@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Seguranca.Core.Domain.Models;
-using Seguranca.Core.Domain.Services;
+using Seguranca.Domain.Contracts.Services;
+using Seguranca.Domain.Entities;
 
 namespace Seguranca.API.Controllers
 {
