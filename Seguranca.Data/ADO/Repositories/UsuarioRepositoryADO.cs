@@ -19,31 +19,6 @@ namespace Seguranca.Data.ADO.Repositories
 
         public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
-        #region Obter
-        public Usuario Obter(string email)
-        {
-            var query = $@"SELECT 
-	                        u.UsuarioId, u.Nome, u.Email, u.Senha FROM Usuario u
-                         WHERE Email = '{email}'";
-            try
-            {
-                _context.AbrirConexao();
-                _context.DbCommand.CommandType = System.Data.CommandType.Text;
-                _context.DbCommand.CommandText = query;
-
-                return ObterLista(_context.DbCommand.ExecuteReader()).First();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex.InnerException);
-            }
-            finally
-            {
-                _context.FecharConexao();
-            }
-        }
-        #endregion
-
         #region ObterAsync
         public async Task<IEnumerable<Usuario>> ObterAsync()
         {
@@ -81,6 +56,29 @@ namespace Seguranca.Data.ADO.Repositories
 
                 var dr = await _context.DbCommand.ExecuteReaderAsync();
                 return ObterLista(dr).First();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                _context.FecharConexao();
+            }
+        }
+
+        public async Task<Usuario> ObterAsync(string email)
+        {
+            var query = $@"SELECT 
+	                        u.UsuarioId, u.Nome, u.Email, u.Senha FROM Usuario u
+                         WHERE Email = '{email}'";
+            try
+            {
+                _context.AbrirConexao();
+                _context.DbCommand.CommandType = System.Data.CommandType.Text;
+                _context.DbCommand.CommandText = query;
+
+                return ObterLista(await _context.DbCommand.ExecuteReaderAsync()).First();
             }
             catch (Exception ex)
             {

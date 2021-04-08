@@ -57,7 +57,7 @@ namespace Seguranca.Data.EFC
             {
                 Nome = "Raymundo Gledisson",
                 Email = "gledisson@hotmail.com",
-                Senha = "123456".Encrypt()
+                Senha = "12345678".Encrypt()
             });
             context.SaveChanges();
 

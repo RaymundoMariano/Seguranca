@@ -22,7 +22,6 @@ namespace Seguranca.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -38,24 +37,29 @@ namespace Seguranca.API
                     Configuration.GetConnectionString("SegurancaConnection")));
 
             // injeção dependência Services
-            services.AddScoped<IEventoRepository, EventoRepositoryEFC>();
-            services.AddScoped<IEventoService, EventoService>();
-            services.AddScoped<IFormularioRepository, FormularioRepositoryEFC>();
-            services.AddScoped<IFormularioService, FormularioService>();
-            services.AddScoped<IModuloRepository, ModuloRepositoryEFC>();
-            services.AddScoped<IModuloService, ModuloService>();
-            services.AddScoped<IPerfilRepository, PerfilRepositoryEFC>();
-            services.AddScoped<IPerfilService, PerfilService>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepositoryEFC>();
-            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<SegurancaContextEFC>();
+            services.AddTransient<IEventoRepository, EventoRepositoryEFC>();
+            services.AddTransient<IEventoService, EventoService>();
+            services.AddTransient<IFormularioRepository, FormularioRepositoryEFC>();
+            services.AddTransient<IFormularioService, FormularioService>();
+            services.AddTransient<IModuloRepository, ModuloRepositoryEFC>();
+            services.AddTransient<IModuloService, ModuloService>();
+            services.AddTransient<IPerfilRepository, PerfilRepositoryEFC>();
+            services.AddTransient<IPerfilService, PerfilService>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepositoryEFC>();
+            services.AddTransient<IUsuarioService, UsuarioService>();
+
+            // injeção dependência mappers
+            services.AddAutoMapper(typeof(Startup).Assembly);
 
             //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers()
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
-                     Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                    .AddNewtonsoftJson(options => options.SerializerSettings.NullValueHandling =
+                        Newtonsoft.Json.NullValueHandling.Ignore);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

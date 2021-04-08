@@ -8,6 +8,6 @@ namespace Seguranca.Domain.Contracts.Repositories
     {
         Task<IEnumerable<Usuario>> ObterAsyncFull();
         Task<Usuario> ObterAsyncFull(int id);
-        Usuario Obter(string email);
+        Task<Usuario> ObterAsync(string email);
     }
 }

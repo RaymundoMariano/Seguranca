@@ -13,10 +13,10 @@ namespace Seguranca.Data.EFC.Repositories
         {
         }
 
-        #region Obter
-        public Usuario Obter(string email)
+        #region ObterAsync
+        public async Task<Usuario> ObterAsync(string email)
         {
-            return _segurancaContext.Usuario.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            return await _segurancaContext.Usuario.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
         #endregion
 
