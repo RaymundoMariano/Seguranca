@@ -1,7 +1,5 @@
-﻿using Seguranca.Domain.Cryptography;
-using Seguranca.Domain.Entities;
+﻿using Seguranca.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Seguranca.Data.EFC
 {
@@ -53,22 +51,23 @@ namespace Seguranca.Data.EFC
             };
             context.Perfil.AddRange(perfis);
 
-            context.Usuario.Add(new Usuario()
-            {
-                Nome = "Raymundo Gledisson",
-                Email = "gledisson@hotmail.com",
-                Senha = "12345678".Encrypt()
-            });
             context.SaveChanges();
 
-            context.PerfilUsuario.Add(new PerfilUsuario()
-            {
-                UsuarioId = 1,
-                ModuloId = 1,
-                PerfilId = context.Perfil.First(p => p.Nome == "Administrador").PerfilId
-            });
+            //context.Usuario.Add(new Usuario()
+            //{
+            //    Nome = "Raymundo Gledisson",
+            //    Email = "gledisson@hotmail.com",
+            //});
+            //context.SaveChanges();
 
-            context.SaveChanges();
+            //context.PerfilUsuario.Add(new PerfilUsuario()
+            //{
+            //    UsuarioId = 1,
+            //    ModuloId = 1,
+            //    PerfilId = context.Perfil.First(p => p.Nome == "Administrador").PerfilId
+            //});
+
+            //context.SaveChanges();
         }
     }
 }

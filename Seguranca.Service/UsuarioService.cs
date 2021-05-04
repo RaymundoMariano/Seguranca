@@ -1,7 +1,6 @@
 ﻿using Acessorio.Util;
 using Seguranca.Domain.Contracts.Repositories;
 using Seguranca.Domain.Contracts.Services;
-using Seguranca.Domain.Cryptography;
 using Seguranca.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -67,53 +66,8 @@ namespace Seguranca.Service
                 var user = await ObterAsync(usuario.Email);
                 if (user != null)
                     throw new ServiceException("Já existe usuário com esse email - " + usuario.Email);
-                
-                usuario.Senha = usuario.Senha.Trim().Encrypt();
 
                 _usuarioRepository.Insere(usuario);
-                await _usuarioRepository.UnitOfWork.SaveChangesAsync();
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region UpdateAsync
-        public async Task UpdateAsync(int usuarioId, Usuario usuario)
-        {
-            try
-            {
-                if (usuarioId != usuario.UsuarioId)
-                    throw new ServiceException(usuarioId + " Diferente " + usuario.UsuarioId);
-
-                if (!Validacao.EmailValido(usuario.Email))
-                    throw new ServiceException("Email inválido - " + usuario.Email);
-
-                var user = await ObterAsync(usuarioId);
-                if (user == null)
-                    throw new ServiceException("Usuário não cadastrado - " + usuarioId);
-
-                if (user.Senha != usuario.Senha.Trim().Encrypt())
-                    throw new ServiceException("Senha inválida - " + usuarioId);
-
-                _usuarioRepository.Update(usuario);
-                await _usuarioRepository.UnitOfWork.SaveChangesAsync();                
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region RemoveAsync
-        public async Task RemoveAsync(int usuarioId)
-        {
-            try
-            {
-                var usuario = await ObterAsync(usuarioId);
-                if (usuario == null)
-                    throw new ServiceException("Usuario não cadastrado - " + usuarioId);
-
-                _usuarioRepository.Remove(usuario);
                 await _usuarioRepository.UnitOfWork.SaveChangesAsync();
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }

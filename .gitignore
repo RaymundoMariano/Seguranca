@@ -101,3 +101,15 @@ Seguranca.Service/obj/project.assets.json
 Seguranca.Service/obj/Seguranca.Service.csproj.nuget.dgspec.json
 Seguranca.Service/obj/Seguranca.Service.csproj.nuget.g.props
 Seguranca.Service/obj/Seguranca.Service.csproj.nuget.g.targets
+Seguranca.Client/bin/Debug/net5.0/Seguranca.Client.deps.json
+Seguranca.Client/obj/Debug/net5.0/.NETCoreApp,Version=v5.0.AssemblyAttributes.cs
+Seguranca.Client/obj/Debug/net5.0/Seguranca.Client.AssemblyInfo.cs
+Seguranca.Client/obj/Debug/net5.0/Seguranca.Client.csproj.FileListAbsolute.txt
+Seguranca.Client/obj/Debug/net5.0/Seguranca.Client.GeneratedMSBuildEditorConfig.editorconfig
+Seguranca.Client/obj/project.assets.json
+Seguranca.Client/obj/Seguranca.Client.csproj.nuget.dgspec.json
+Seguranca.Client/obj/Seguranca.Client.csproj.nuget.g.props
+Seguranca.Client/obj/Seguranca.Client.csproj.nuget.g.targets
+Seguranca.Data/bin/Debug/net5.0/Seguranca.Data.runtimeconfig.dev.json
+Seguranca.Data/bin/Debug/net5.0/Seguranca.Data.runtimeconfig.json
+Seguranca.Data/obj/Seguranca.Data.csproj.EntityFrameworkCore.targets

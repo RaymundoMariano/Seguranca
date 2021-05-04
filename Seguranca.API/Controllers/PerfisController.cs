@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Seguranca.Domain.Models;
 using Seguranca.Domain.Contracts.Services;
 using Seguranca.Domain.Entities;
-using Seguranca.Domain.Models;
 
 namespace Seguranca.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PerfisController : ControllerBase
     {
         private readonly IPerfilService _perfilService;

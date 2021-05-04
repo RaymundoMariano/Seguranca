@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Seguranca.Domain.Entities;
 using Seguranca.Domain.Models;
+using Seguranca.Domain.Entities;
 
 namespace Seguranca.API.Mappers
 {

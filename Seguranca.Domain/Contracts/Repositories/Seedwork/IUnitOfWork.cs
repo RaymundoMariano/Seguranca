@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Seguranca.Domain.Contracts.Repositories
+namespace Seguranca.Domain.Contracts.Repositories.Seedwork
 {
     public interface IUnitOfWork
     {

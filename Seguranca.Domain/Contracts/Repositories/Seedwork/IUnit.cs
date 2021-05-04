@@ -1,4 +1,4 @@
-﻿namespace Seguranca.Domain.Contracts.Repositories
+﻿namespace Seguranca.Domain.Contracts.Repositories.Seedwork
 {
     public interface IUnit
     {

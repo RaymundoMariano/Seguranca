@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Seguranca.Domain.Contracts.Repositories;
+using Seguranca.Domain.Contracts.Repositories.Seedwork;
 using Seguranca.Domain.Entities;
 using System;
 using System.Collections.Generic;

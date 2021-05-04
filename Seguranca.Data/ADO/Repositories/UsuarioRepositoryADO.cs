@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Seguranca.Domain.Contracts.Repositories;
+using Seguranca.Domain.Contracts.Repositories.Seedwork;
 using Seguranca.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -136,7 +137,6 @@ namespace Seguranca.Data.ADO.Repositories
                         UsuarioId = (int)dr["UsuarioId"],
                         Nome = dr["Nome"].ToString(),
                         Email = dr["Email"].ToString(),
-                        Senha = dr["Senha"].ToString(),
                     });
                 }
             }

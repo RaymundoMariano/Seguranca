@@ -1,15 +1,20 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Seguranca.Client.Auth;
 using Seguranca.Data.EFC;
 using Seguranca.Data.EFC.Repositories;
+using Seguranca.Domain.Contracts.Clients.Auth;
 using Seguranca.Domain.Contracts.Repositories;
 using Seguranca.Domain.Contracts.Services;
 using Seguranca.Service;
+using System.Text;
 
 namespace Seguranca.API
 {
@@ -24,13 +29,6 @@ namespace Seguranca.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Seguranca.API", Version = "v1" });
-            });
-
             // injeção dependência DBContext
             services.AddDbContext<SegurancaContextEFC>(options =>
                 options.UseSqlServer(
@@ -49,6 +47,9 @@ namespace Seguranca.API
             services.AddTransient<IUsuarioRepository, UsuarioRepositoryEFC>();
             services.AddTransient<IUsuarioService, UsuarioService>();
 
+            services.AddTransient<IRegisterClient, RegisterClient>();
+            services.AddTransient<ILoginClient, LoginClient>();
+
             // injeção dependência mappers
             services.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -58,6 +59,40 @@ namespace Seguranca.API
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                     .AddNewtonsoftJson(options => options.SerializerSettings.NullValueHandling =
                         Newtonsoft.Json.NullValueHandling.Ignore);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt =>
+            {
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // Validar a terceira parte do token jwt usando o segredo que adicionamos
+                    // no appsettings e verifica se o token jwt foi gerado
+                    // https://www.browserling.com/tools/random-string <- Gera o segredo aleatoriamente
+                    ValidateIssuerSigningKey = true,
+
+                    // Adiciona chave secreta à nossa criptografia Jwt
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    RequireExpirationTime = false,
+                    ValidateLifetime = true
+                };
+            });
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Seguranca.API", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,6 +107,8 @@ namespace Seguranca.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

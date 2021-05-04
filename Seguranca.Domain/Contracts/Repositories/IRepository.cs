@@ -1,5 +1,5 @@
-﻿using Seguranca.Domain.Entities;
-using System;
+﻿using Seguranca.Domain.Contracts.Repositories.Seedwork;
+using Seguranca.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

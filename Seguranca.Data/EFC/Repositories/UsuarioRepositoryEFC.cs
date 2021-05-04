@@ -1,17 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Seguranca.Domain.Contracts.Repositories;
+using Seguranca.Domain.Contracts.Repositories.Seedwork;
 using Seguranca.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seguranca.Data.EFC.Repositories
 {
-    public class UsuarioRepositoryEFC : RepositoryEFC<Usuario>, IUsuarioRepository
+    public class UsuarioRepositoryEFC : IUsuarioRepository
     {
-        public UsuarioRepositoryEFC(SegurancaContextEFC segurancaContext) : base(segurancaContext)
+        protected readonly SegurancaContextEFC _segurancaContext;
+        public IUnitOfWork UnitOfWork => _segurancaContext;
+        public UsuarioRepositoryEFC(SegurancaContextEFC segurancaContext)
         {
+            _segurancaContext = segurancaContext;
         }
+
+        #region ObterAsync
+        public async Task<IEnumerable<Usuario>> ObterAsync()
+        {
+            return await _segurancaContext.Set<Usuario>().ToListAsync();
+        }
+
+        public async Task<Usuario> ObterAsync(int id)
+        {
+            return await _segurancaContext.Set<Usuario>().FindAsync(id);
+        }
+        #endregion
+
+        #region Insere
+        public void Insere(Usuario usuario)
+        {
+            _segurancaContext.Set<Usuario>().Add(usuario);
+        }
+        #endregion
+
 
         #region ObterAsync
         public async Task<Usuario> ObterAsync(string email)
@@ -50,6 +73,6 @@ namespace Seguranca.Data.EFC.Repositories
                                         .ThenInclude(u => u.Modulo)
                     .FirstAsync(u => u.UsuarioId == usuarioId);
         }
-        #endregion        
+        #endregion
     }
 }
