@@ -1,7 +1,10 @@
-﻿namespace Seguranca.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Seguranca.Domain.Entities
 {
     public class Entity
-    {
-        public string Nome { get; set; }        
+    {   
+        [NotMapped]
+        public bool Selected { get; set; }
     }
 }

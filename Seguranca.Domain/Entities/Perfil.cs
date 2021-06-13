@@ -11,7 +11,9 @@ namespace Seguranca.Domain.Entities
         }
 
         public int PerfilId { get; set; }
+        public string Nome { get; set; }
         public string Descricao { get; set; }
+        public bool CreatedSystem { get; set; }
 
         public virtual ICollection<PerfilUsuario> PerfilUsuario { get; set; }
         public virtual ICollection<RestricaoPerfil> RestricaoPerfil { get; set; }

@@ -10,6 +10,9 @@ namespace Seguranca.Data.EFC.Tables
         {
             builder.ToTable("RestricaoPerfil");
 
+            builder.HasIndex(p => new { p.PerfilId, p.ModuloId, p.FormularioId, p.EventoId }, "IX_RestricaoPerfil")
+                .IsUnique();
+
             builder.HasOne(d => d.Evento)
                 .WithMany(p => p.RestricaoPerfil)
                 .HasForeignKey(d => d.EventoId)

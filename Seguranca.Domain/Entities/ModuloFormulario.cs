@@ -1,6 +1,6 @@
 ﻿namespace Seguranca.Domain.Entities
 {
-    public partial class ModuloFormulario
+    public partial class ModuloFormulario : Entity
     {
         public int Id { get; set; }
         public int ModuloId { get; set; }

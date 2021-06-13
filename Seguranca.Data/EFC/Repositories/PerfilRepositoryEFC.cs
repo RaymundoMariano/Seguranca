@@ -20,11 +20,11 @@ namespace Seguranca.Data.EFC.Repositories
                     .Include(p => p.PerfilUsuario)
                         .ThenInclude(p => p.Usuario)
                     .Include(p => p.RestricaoPerfil)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.RestricaoPerfil)
+                        .ThenInclude(p => p.Formulario)
+                    .Include(p => p.RestricaoPerfil)
                         .ThenInclude(p => p.Evento)
-                            .ThenInclude(p => p.FormularioEvento)
-                                .ThenInclude(p => p.Formulario)
-                                    .ThenInclude(p => p.ModuloFormulario)
-                                        .ThenInclude(p => p.Modulo)
                     .ToListAsync();
         }
 
@@ -35,12 +35,12 @@ namespace Seguranca.Data.EFC.Repositories
                     .Include(p => p.PerfilUsuario)
                         .ThenInclude(p => p.Usuario)
                     .Include(p => p.RestricaoPerfil)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.RestricaoPerfil)
+                        .ThenInclude(p => p.Formulario)
+                    .Include(p => p.RestricaoPerfil)
                         .ThenInclude(p => p.Evento)
-                            .ThenInclude(p => p.FormularioEvento)
-                                .ThenInclude(p => p.Formulario)
-                                    .ThenInclude(p => p.ModuloFormulario)
-                                        .ThenInclude(p => p.Modulo)
-                    .FirstAsync(p => p.PerfilId == perfilId);
+                    .FirstOrDefaultAsync(p => p.PerfilId == perfilId);
         }
         #endregion
     }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,13 @@ namespace Seguranca.API
             services.AddTransient<IEventoService, EventoService>();
             services.AddTransient<IFormularioRepository, FormularioRepositoryEFC>();
             services.AddTransient<IFormularioService, FormularioService>();
+
+            services.AddTransient<IPerfilUsuarioRepository, PerfilUsuarioRepositoryEFC>();
+            services.AddTransient<IRestricaoUsuarioRepository, RestricaoUsuarioRepositoryEFC>();
+            services.AddTransient<IRestricaoPerfilRepository, RestricaoPerfilRepositoryEFC>();
+            services.AddTransient<IModuloFormularioRepository, ModuloFormularioRepositoryEFC>();
+            services.AddTransient<IFormularioEventoRepository, FormularioEventoRepositoryEFC>();
+
             services.AddTransient<IModuloRepository, ModuloRepositoryEFC>();
             services.AddTransient<IModuloService, ModuloService>();
             services.AddTransient<IPerfilRepository, PerfilRepositoryEFC>();
@@ -49,6 +58,15 @@ namespace Seguranca.API
 
             services.AddTransient<IRegisterClient, RegisterClient>();
             services.AddTransient<ILoginClient, LoginClient>();
+
+            //Controllers protegidos contra acesso anônimo exceto as actions que tenham o atributo
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                       .RequireAuthenticatedUser()
+                       .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             // injeção dependência mappers
             services.AddAutoMapper(typeof(Startup).Assembly);

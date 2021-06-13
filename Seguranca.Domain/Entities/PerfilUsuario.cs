@@ -1,6 +1,6 @@
 ﻿namespace Seguranca.Domain.Entities
 {
-    public partial class PerfilUsuario
+    public partial class PerfilUsuario : Entity
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }

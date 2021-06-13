@@ -18,6 +18,8 @@ namespace Seguranca.Data.EFC.Tables
             builder.Property(e => e.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.Property(e => e.CreatedSystem).HasDefaultValue(false);
         }
     }
 }

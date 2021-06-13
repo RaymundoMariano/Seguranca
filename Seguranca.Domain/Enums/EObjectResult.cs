@@ -2,8 +2,9 @@
 {
     public enum EObjectResult
     {
-        BadReqBuest = 1,
+        BadRequest = 1,
         JsonResult,
-        OK 
+        OK,
+        NotFound
     }
 }

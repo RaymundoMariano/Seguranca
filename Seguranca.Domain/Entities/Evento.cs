@@ -12,7 +12,9 @@ namespace Seguranca.Domain.Entities
         }
 
         public int EventoId { get; set; }
+        public string Nome { get; set; }
         public string Descricao { get; set; }
+        public bool CreatedSystem { get; set; }
 
         public virtual ICollection<FormularioEvento> FormularioEvento { get; set; }
         public virtual ICollection<RestricaoPerfil> RestricaoPerfil { get; set; }

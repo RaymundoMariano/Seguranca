@@ -30,7 +30,7 @@ namespace Seguranca.Data.EFC.Repositories
                     .Include(e => e.FormularioEvento)
                     .Include(e => e.RestricaoPerfil)
                     .Include(e => e.RestricaoUsuario)
-                    .FirstAsync(e => e.EventoId == eventoId);
+                    .FirstOrDefaultAsync(e => e.EventoId == eventoId);
         }
         #endregion
     }

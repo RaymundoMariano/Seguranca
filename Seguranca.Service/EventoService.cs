@@ -30,7 +30,7 @@ namespace Seguranca.Service
             {
                 var evento = await _eventoRepository.ObterAsync(id);
                 if (evento == null)
-                    throw new ServiceException("Evento não cadastrado - " + id);
+                    throw new ServiceException($"Evento com Id = {id} não foi encontrado");
                 return evento;
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
@@ -78,8 +78,9 @@ namespace Seguranca.Service
             {
                 var evento = await ObterAsync(id);
                 if (evento == null)
-                    throw new ServiceException("Evento não cadastrado - " + id);
-
+                    throw new ServiceException($"Evento com Id = {id} não foi encontrado");
+                if (evento.CreatedSystem)
+                    throw new ServiceException($"Evento com Id = {id} foi criado pelo sistema");
                 _eventoRepository.Remove(evento);
                 await _eventoRepository.UnitOfWork.SaveChangesAsync();
             }

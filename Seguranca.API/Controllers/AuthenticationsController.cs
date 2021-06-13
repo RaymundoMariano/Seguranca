@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Seguranca.Domain.Auth.Requests;
 using Seguranca.Domain.Auth.Responses;
@@ -6,7 +7,6 @@ using Seguranca.Domain.Contracts.Clients.Auth;
 using Seguranca.Domain.Contracts.Services;
 using Seguranca.Domain.Entities;
 using Seguranca.Domain.Enums;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,6 +14,7 @@ namespace SEG.MVC.Controllers.Auth
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationsController : ControllerBase
     {
         private readonly IRegisterClient _registerClient;
@@ -44,18 +45,18 @@ namespace SEG.MVC.Controllers.Auth
             return await ObjectResult(ObterRegister(login), user);
         }
 
-        private async Task<IActionResult> ObjectResult(RegisterResponse register, Object user)
+        private async Task<IActionResult> ObjectResult(RegisterResponse register, object user)
         {
             switch ((EObjectResult)register.ObjectResult)
             {
-                case EObjectResult.BadReqBuest:
+                case EObjectResult.BadRequest:
                     return BadRequest(register);
 
                 case EObjectResult.JsonResult:
                     return new JsonResult(register);
 
                 case EObjectResult.OK:
-                    if (user.Equals(typeof(RegisterResponse)))
+                    if (user.GetType().Name == "RegisterRequest")
                     {
                         var usuario = new Usuario() { Nome = register.UserName, Email = register.Email };
                         await _usuarioService.InsereAsync(usuario);

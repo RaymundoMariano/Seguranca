@@ -52,7 +52,7 @@ namespace Seguranca.Data.EFC.Repositories
                         .ThenInclude(m => m.Formulario)
                             .ThenInclude(m => m.FormularioEvento)
                                 .ThenInclude(m => m.Evento)
-                    .FirstAsync(m => m.ModuloId == moduloId);
+                    .FirstOrDefaultAsync(m => m.ModuloId == moduloId);
         }
         #endregion
     }
