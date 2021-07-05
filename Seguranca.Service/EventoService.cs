@@ -1,4 +1,5 @@
-﻿using Seguranca.Domain.Contracts.Repositories;
+﻿using Seguranca.Domain.Aplication.Responses;
+using Seguranca.Domain.Contracts.Repositories;
 using Seguranca.Domain.Contracts.Services;
 using Seguranca.Domain.Entities;
 using System;
@@ -20,7 +21,10 @@ namespace Seguranca.Service
         #region ObterAsync
         public async Task<IEnumerable<Evento>> ObterAsync()
         {
-            try { return await _eventoRepository.ObterAsync(); }
+            try 
+            { 
+                return await _eventoRepository.ObterAsync(); 
+            }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
@@ -30,7 +34,7 @@ namespace Seguranca.Service
             {
                 var evento = await _eventoRepository.ObterAsync(id);
                 if (evento == null)
-                    throw new ServiceException($"Evento com Id = {id} não foi encontrado");
+                    throw new ServiceException($"O evento com Id {id} não foi encontrado");
                 return evento;
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
@@ -44,8 +48,8 @@ namespace Seguranca.Service
             try
             {
                 var eventos = await ObterAsync();
-                if (eventos.Contains(evento))
-                    throw new ServiceException("Evento já cadastrado - " + evento.Nome);
+                if ((eventos.FirstOrDefault(e => e.Nome == evento.Nome) != null))
+                    throw new ServiceException($"Já existe evento cadastrado com o nome: {evento.Nome}");
 
                 _eventoRepository.Insere(evento);
                 await _eventoRepository.UnitOfWork.SaveChangesAsync();
@@ -60,8 +64,11 @@ namespace Seguranca.Service
         {
             try
             {
-                if (id != evento.EventoId)
-                    throw new ServiceException(id + " Diferente " + evento.EventoId);
+                if (id != evento.EventoId) throw new ServiceException(
+                    $"Id informado {id} é Diferente do Id do evento {evento.EventoId}");
+
+                if (evento.CreatedSystem) throw new ServiceException(
+                    $"O evento {evento.Nome} foi criado pelo sistema. Alteração inválida!");
 
                 _eventoRepository.Update(evento);
                 await _eventoRepository.UnitOfWork.SaveChangesAsync();                
@@ -77,10 +84,12 @@ namespace Seguranca.Service
             try
             {
                 var evento = await ObterAsync(id);
-                if (evento == null)
-                    throw new ServiceException($"Evento com Id = {id} não foi encontrado");
-                if (evento.CreatedSystem)
-                    throw new ServiceException($"Evento com Id = {id} foi criado pelo sistema");
+                if (evento == null) throw new ServiceException(
+                    $"O evento com Id = {id} não foi encontrado");
+
+                if (evento.CreatedSystem) throw new ServiceException(
+                    $"O evento {evento.Nome} foi criado pelo sistema. Exclusão inválida!");
+
                 _eventoRepository.Remove(evento);
                 await _eventoRepository.UnitOfWork.SaveChangesAsync();
             }

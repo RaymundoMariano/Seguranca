@@ -20,6 +20,6 @@ namespace Seguranca.Data.EFC.Repositories
                 rp.FormularioId == formularioId &&
                 rp.EventoId == eventoId);
         }
-        #endregion        
+        #endregion
     }
 }

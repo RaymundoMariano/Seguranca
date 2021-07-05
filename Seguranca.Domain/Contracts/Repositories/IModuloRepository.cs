@@ -6,7 +6,9 @@ namespace Seguranca.Domain.Contracts.Repositories
 {
     public interface IModuloRepository : IRepository<Modulo>
     {
-        Task<IEnumerable<Modulo>> ObterAsyncFull();
-        Task<Modulo> ObterAsyncFull(int id);
+        Task<IEnumerable<Modulo>> GetFullAsync();
+        Task<Modulo> GetFullAsync(int id);
+        Task<Modulo> GetFullAsync(string nome);
+
     }
 }

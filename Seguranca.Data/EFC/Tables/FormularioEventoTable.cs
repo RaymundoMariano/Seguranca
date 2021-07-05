@@ -24,6 +24,8 @@ namespace Seguranca.Data.EFC.Tables
                 .HasForeignKey(d => d.FormularioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_FormularioEvento_Formulario");
+
+            builder.Property(e => e.CreatedSystem).HasDefaultValue(false);
         }
     }
 }

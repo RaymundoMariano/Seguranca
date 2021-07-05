@@ -43,7 +43,7 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
 
         // GET: api/Eventos/5
@@ -62,17 +62,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.NotFound,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -100,17 +91,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = eventoModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -138,17 +120,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = eventoModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion        
 
@@ -169,17 +142,23 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
+        }
+        #endregion
+
+        #region Erro
+        private ActionResult<ResultResponse> Erro(ETipoErro erro, string mensagem)
+        {
+            return (new ResultResponse()
             {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+                Succeeded = false,
+                ObjectRetorno = null,
+                ObjectResult = (erro == ETipoErro.Fatal)
+                    ? (int)EObjectResult.ErroFatal : (int)EObjectResult.BadRequest,
+                Errors = (mensagem == null)
+                    ? new List<string>() : new List<string> { mensagem }
+            });
         }
         #endregion
     }

@@ -17,11 +17,16 @@ namespace Seguranca.API.Controllers
     public class FormulariosController : ControllerBase
     {
         private readonly IFormularioService _formularioService;
+        private readonly IFormularioEventoService _formularioEventoService;
         private readonly IMapper _mapper;
 
-        public FormulariosController(IFormularioService formularioService, IMapper mapper)
+        public FormulariosController(
+            IFormularioService formularioService,
+            IFormularioEventoService formularioEventoService,
+            IMapper mapper)
         {
             _formularioService = formularioService;
+            _formularioEventoService = formularioEventoService;
             _mapper = mapper;
         }
 
@@ -42,7 +47,7 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
 
         // GET: api/Formularios/5
@@ -52,7 +57,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var formulario = await _formularioService.ObterAsync(formularioId);
+                var formulario = await _formularioService.GetFullAsync(formularioId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,
@@ -61,17 +66,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.NotFound,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -99,17 +95,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = formularioModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -137,17 +124,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = formularioModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion        
 
@@ -168,17 +146,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -188,16 +157,14 @@ namespace Seguranca.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ResultResponse>> GetEventos(int formularioId)
         {
-            var resultResponse = await _formularioService.ObterEventosAsync(formularioId);
-            if (resultResponse.Succeeded)
+            try
             {
+                var resultResponse = await _formularioEventoService.ObterEventosAsync(formularioId);
                 resultResponse.ObjectRetorno = _mapper.Map<List<EventoModel>>((List<Evento>)resultResponse.ObjectRetorno);
+                return resultResponse;
             }
-            else
-            {
-                resultResponse.ObjectResult = (int)EObjectResult.BadRequest;
-            }
-            return resultResponse;
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -206,14 +173,28 @@ namespace Seguranca.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> PostEventos(int formularioId, List<EventoModel> eventosModel)
         {
-            var eventos = _mapper.Map<List<Evento>>(eventosModel);
-
-            var resultResponse = await _formularioService.AtualizarEventosAsync(formularioId, eventos);
-            if (!resultResponse.Succeeded)
+            try
             {
-                resultResponse.ObjectResult = (int)EObjectResult.BadRequest;
+                var eventos = _mapper.Map<List<Evento>>(eventosModel);
+                return await _formularioEventoService.AtualizarEventosAsync(formularioId, eventos);
             }
-            return resultResponse;
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
+        }
+        #endregion
+
+        #region Erro
+        private ActionResult<ResultResponse> Erro(ETipoErro erro, string mensagem)
+        {
+            return (new ResultResponse()
+            {
+                Succeeded = false,
+                ObjectRetorno = null,
+                ObjectResult = (erro == ETipoErro.Fatal) 
+                    ? (int)EObjectResult.ErroFatal : (int)EObjectResult.BadRequest,
+                Errors = (mensagem == null) 
+                    ? new List<string>() : new List<string> { mensagem }
+            });
         }
         #endregion
     }

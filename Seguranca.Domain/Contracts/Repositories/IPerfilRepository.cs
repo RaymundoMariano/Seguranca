@@ -6,7 +6,8 @@ namespace Seguranca.Domain.Contracts.Repositories
 {
     public interface IPerfilRepository : IRepository<Perfil>
     {
-        Task<IEnumerable<Perfil>> ObterAsyncFull();
-        Task<Perfil> ObterAsyncFull(int id);
+        Task<Perfil> GetFullAsync(string nome);
+        Task<IEnumerable<Perfil>> GetFullAsync();
+        Task<Perfil> GetFullAsync(int id);
     }
 }

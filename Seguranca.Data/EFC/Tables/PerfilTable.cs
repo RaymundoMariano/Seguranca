@@ -19,6 +19,9 @@ namespace Seguranca.Data.EFC.Tables
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(e => e.FuncaoId)
+                .IsRequired();
+
             builder.Property(e => e.CreatedSystem).HasDefaultValue(false);
         }
     }

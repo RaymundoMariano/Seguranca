@@ -16,6 +16,66 @@ namespace Seguranca.Data.EFC.Repositories
             _segurancaContext = segurancaContext;
         }
 
+        #region GetFullAsync
+        public async Task<IEnumerable<Usuario>> GetFullAsync()
+        {
+            return await _segurancaContext.Usuario
+                    //.AsNoTracking()
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Usuario)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Perfil)
+                        .ThenInclude(p => p.Funcao)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Formulario)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Evento)
+                    .ToListAsync();
+        }
+
+        public async Task<Usuario> GetFullAsync(int usuarioId)
+        {
+            return await _segurancaContext.Usuario
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Usuario)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Perfil)
+                        .ThenInclude(p => p.Funcao)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Formulario)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Evento)
+                    .FirstOrDefaultAsync(p => p.UsuarioId == usuarioId);
+        }
+
+        public async Task<Usuario> GetFullAsync(string nome)
+        {
+            return await _segurancaContext.Usuario
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Usuario)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.PerfilUsuario)
+                        .ThenInclude(p => p.Perfil)
+                        .ThenInclude(p => p.Funcao)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Modulo)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Formulario)
+                    .Include(p => p.RestricaoUsuario)
+                        .ThenInclude(p => p.Evento)
+                    .FirstOrDefaultAsync(u => u.Nome == nome);
+        }
+        #endregion
+
         #region ObterAsync
         public async Task<IEnumerable<Usuario>> ObterAsync()
         {
@@ -31,15 +91,6 @@ namespace Seguranca.Data.EFC.Repositories
         {
             return await _segurancaContext.Usuario.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
-
-        public async Task<RestricaoUsuario> ObterAsync(int usuarioId, int? moduloId, int? formularioId, int? eventoId)
-        {
-            return await _segurancaContext.RestricaoUsuario.FirstOrDefaultAsync(rp =>
-                rp.UsuarioId == usuarioId && 
-                rp.ModuloId == moduloId && 
-                rp.FormularioId == formularioId &&
-                rp.EventoId == eventoId);
-        }
         #endregion
 
         #region Insere
@@ -47,42 +98,6 @@ namespace Seguranca.Data.EFC.Repositories
         {
             _segurancaContext.Set<Usuario>().Add(usuario);
         }
-        #endregion        
-
-        #region ObterAsyncFull
-        public async Task<IEnumerable<Usuario>> ObterAsyncFull()
-        {
-            return await _segurancaContext.Usuario
-                    //.AsNoTracking()
-                    .Include(p => p.PerfilUsuario)
-                        .ThenInclude(p => p.Usuario)
-                    .Include(p => p.PerfilUsuario)
-                        .ThenInclude(p => p.Perfil)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Modulo)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Formulario)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Evento)
-                    .ToListAsync();
-        }
-
-        public async Task<Usuario> ObterAsyncFull(int usuarioId)
-        {
-            return await _segurancaContext.Usuario
-                    //.AsNoTracking()
-                    .Include(p => p.PerfilUsuario)
-                        .ThenInclude(p => p.Usuario)
-                    .Include(p => p.PerfilUsuario)
-                        .ThenInclude(p => p.Perfil)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Modulo)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Formulario)
-                    .Include(p => p.RestricaoUsuario)
-                        .ThenInclude(p => p.Evento)
-                    .FirstOrDefaultAsync(p => p.UsuarioId == usuarioId);
-        }
-        #endregion
+        #endregion                
     }
 }

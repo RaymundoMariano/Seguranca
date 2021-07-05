@@ -6,6 +6,7 @@
         public int UsuarioId { get; set; }
         public int ModuloId { get; set; }
         public int? PerfilId { get; set; }
+        public bool CreatedSystem { get; set; }
 
         public virtual Modulo Modulo { get; set; }
         public virtual Perfil Perfil { get; set; }

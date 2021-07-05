@@ -28,6 +28,8 @@ namespace Seguranca.Data.EFC.Tables
                 .WithMany(p => p.PerfilUsuario)
                 .HasForeignKey(d => d.UsuarioId)
                 .HasConstraintName("PerfilUsuario_Usuario");
+
+            builder.Property(e => e.CreatedSystem).HasDefaultValue(false);
         }
     }
 }

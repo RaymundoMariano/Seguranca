@@ -17,7 +17,7 @@ namespace Seguranca.Domain.Models
         [DisplayName("Id")]
         public int FormularioId { get; set; }
 
-        [DisplayName("Nome")]
+        [DisplayName("Formulário")]
         [Required(ErrorMessage = "campo obrigatório")]
         [StringLength(100, ErrorMessage = "limite de caracteres excedido")]
         public string Nome { get; set; }
@@ -25,6 +25,7 @@ namespace Seguranca.Domain.Models
         [DisplayName("Descrição")]
         [StringLength(50, ErrorMessage = "limite de caracteres excedido")]
         public string Descricao { get; set; }
+        public bool CreatedSystem { get; set; }
 
         public virtual ICollection<FormularioEventoModel> FormularioEvento { get; set; }
         public virtual ICollection<ModuloFormularioModel> ModuloFormulario { get; set; }

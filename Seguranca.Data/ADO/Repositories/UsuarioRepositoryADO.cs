@@ -92,13 +92,20 @@ namespace Seguranca.Data.ADO.Repositories
         }
         #endregion
 
-        #region ObterAsyncFull
-        public Task<IEnumerable<Usuario>> ObterAsyncFull()
+        #region GetFullAsync
+        public Task<IEnumerable<Usuario>> GetFullAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Usuario> ObterAsyncFull(int id)
+        public Task<Usuario> GetFullAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region GetAsync
+        public Task<Usuario> GetFullAsync(string nome)
         {
             throw new NotImplementedException();
         }

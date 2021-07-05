@@ -17,11 +17,16 @@ namespace Seguranca.API.Controllers
     public class PerfisController : ControllerBase
     {
         private readonly IPerfilService _perfilService;
+        private readonly IRestricaoPerfilService _restricaoPerfilService;
         private readonly IMapper _mapper;
 
-        public PerfisController(IPerfilService perfilService, IMapper mapper)
+        public PerfisController(
+            IPerfilService perfilService, 
+            IRestricaoPerfilService restricaoPerfilService,
+            IMapper mapper)
         {
             _perfilService = perfilService;
+            _restricaoPerfilService = restricaoPerfilService;
             _mapper = mapper;
         }
 
@@ -33,7 +38,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var perfis = await _perfilService.ObterAsync();
+                var perfis = await _perfilService.GetFullAsync();
                 return (new ResultResponse()
                 {
                     Succeeded = true,
@@ -42,7 +47,7 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         
         // GET: api/Perfis/5
@@ -52,7 +57,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var perfil = await _perfilService.ObterAsync(perfilId);
+                var perfil = await _perfilService.GetFullAsync(perfilId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,
@@ -61,17 +66,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.NotFound,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -99,17 +95,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = perfilModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -137,17 +124,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = perfilModel,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -168,17 +146,8 @@ namespace Seguranca.API.Controllers
                     Errors = new List<string>()
                 });
             }
-            catch (ServiceException ex)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.BadRequest,
-                    Errors = new List<string>() { ex.Message }
-                });
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -188,16 +157,14 @@ namespace Seguranca.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ResultResponse>> GetRestricoes(int perfilId)
         {
-            var resultResponse = await _perfilService.ObterRestricoesAsync(perfilId);
-            if (resultResponse.Succeeded)
+            try
             {
+                var resultResponse = await _restricaoPerfilService.ObterRestricoesAsync(perfilId);
                 resultResponse.ObjectRetorno = _mapper.Map<List<RestricaoPerfilModel>>((List<RestricaoPerfil>)resultResponse.ObjectRetorno);
+                return resultResponse;
             }
-            else
-            {
-                resultResponse.ObjectResult = (int)EObjectResult.BadRequest;
-            }
-            return resultResponse;
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
         }
         #endregion
 
@@ -206,14 +173,31 @@ namespace Seguranca.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> PostRestricoes(int perfilId, List<RestricaoPerfilModel> restricoesModel)
         {
-            var restricoes = _mapper.Map<List<RestricaoPerfil>>(restricoesModel);
-
-            var resultResponse = await _perfilService.AtualizarRestricoesAsync(perfilId, restricoes);
-            if (!resultResponse.Succeeded)
+            try
             {
-                resultResponse.ObjectResult = (int)EObjectResult.BadRequest;
+                var restricoes = _mapper.Map<List<RestricaoPerfil>>(restricoesModel);
+                var resultResponse = await _restricaoPerfilService.AtualizarRestricoesAsync(perfilId, restricoes);
+                return resultResponse;
             }
-            return resultResponse;
+            catch (ServiceException ex) { return Erro(ETipoErro.Sistema, ex.Message); }
+            catch (Exception) { return Erro(ETipoErro.Fatal, null); }
+        }
+        #endregion
+
+        #region Erro
+        private ActionResult<ResultResponse> Erro(ETipoErro erro, string mensagem)
+        {
+            return (new ResultResponse()
+            {
+                Succeeded = false,
+                ObjectRetorno = null,
+                ObjectResult = erro == ETipoErro.Fatal
+                    ? (int)EObjectResult.ErroFatal 
+                    : (int)EObjectResult.BadRequest,
+                Errors = mensagem == null
+                    ? new List<string>() 
+                    : new List<string> { mensagem }
+            });
         }
         #endregion
     }

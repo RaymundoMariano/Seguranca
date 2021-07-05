@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int ModuloId { get; set; }
         public int FormularioId { get; set; }
+        public bool CreatedSystem { get; set; }
 
         public virtual Formulario Formulario { get; set; }
         public virtual Modulo Modulo { get; set; }

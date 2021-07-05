@@ -21,6 +21,7 @@ namespace Seguranca.Data.EFC
         public virtual DbSet<Evento> Evento { get; set; }
         public virtual DbSet<Formulario> Formulario { get; set; }
         public virtual DbSet<FormularioEvento> FormularioEvento { get; set; }
+        public virtual DbSet<Funcao> Funcao { get; set; }
         public virtual DbSet<Modulo> Modulo { get; set; }
         public virtual DbSet<ModuloFormulario> ModuloFormulario { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
@@ -49,6 +50,7 @@ namespace Seguranca.Data.EFC
             modelBuilder.ApplyConfiguration(new EventoTable());
             modelBuilder.ApplyConfiguration(new FormularioTable());
             modelBuilder.ApplyConfiguration(new FormularioEventoTable());
+            modelBuilder.ApplyConfiguration(new FuncaoTable());
             modelBuilder.ApplyConfiguration(new ModuloTable());
             modelBuilder.ApplyConfiguration(new ModuloFormularioTable());
             modelBuilder.ApplyConfiguration(new PerfilTable());

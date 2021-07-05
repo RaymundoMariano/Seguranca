@@ -1,8 +1,6 @@
-﻿using Seguranca.Domain.Aplication.Responses;
-using Seguranca.Domain.Contracts.Repositories;
+﻿using Seguranca.Domain.Contracts.Repositories;
 using Seguranca.Domain.Contracts.Services;
 using Seguranca.Domain.Entities;
-using Seguranca.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,23 +11,53 @@ namespace Seguranca.Service
     public class ModuloService : IModuloService
     {
         private readonly IModuloRepository _moduloRepository;
-        private readonly IModuloFormularioRepository _moduloFormularioRepository;
-        private readonly IFormularioRepository _formularioRepository;
 
-        public ModuloService(
-            IModuloRepository moduloRepository,
-            IModuloFormularioRepository moduloFormularioRepository,
-            IFormularioRepository formularioRepository)
+        public ModuloService(IModuloRepository moduloRepository)
         {
             _moduloRepository = moduloRepository;
-            _moduloFormularioRepository = moduloFormularioRepository;
-            _formularioRepository = formularioRepository;
         }
+
+        #region GetFullAsync
+        public async Task<IEnumerable<Modulo>> GetFullAsync()
+        {
+            try { return await _moduloRepository.GetFullAsync(); }
+            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+        }
+
+        public async Task<Modulo> GetFullAsync(int moduloId)
+        {
+            try
+            {
+                var modulo = await _moduloRepository.GetFullAsync(moduloId);
+                if (modulo == null)
+                    throw new ServiceException($"Módulo com Id = {moduloId} não foi encontrado");
+                return modulo;
+            }
+            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+        }
+
+        public async Task<Modulo> GetFullAsync(string nome)
+        {
+            try
+            {
+                var modulo = await _moduloRepository.GetFullAsync(nome);
+                if (modulo == null)
+                    throw new ServiceException($"O módulo {nome} não foi encontrado");
+                return modulo;
+            }
+            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
+            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
+        }
+        #endregion
 
         #region ObterAsync
         public async Task<IEnumerable<Modulo>> ObterAsync()
         {
-            try { return await _moduloRepository.ObterAsync(); }
+            try 
+            { 
+                return await _moduloRepository.ObterAsync(); 
+            }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
@@ -37,7 +65,7 @@ namespace Seguranca.Service
         {
             try
             {
-                var modulo = await _moduloRepository.ObterAsyncFull(moduloId);
+                var modulo = await _moduloRepository.ObterAsync(moduloId);
                 if (modulo == null)
                     throw new ServiceException($"Módulo com Id = {moduloId} não foi encontrado");
                 return modulo;
@@ -53,8 +81,8 @@ namespace Seguranca.Service
             try
             {
                 var modulos = await ObterAsync();
-                if (modulos.Contains(modulo))
-                    throw new ServiceException("Modulo já cadastrado - " + modulo.Nome);
+                if ((modulos.FirstOrDefault(m => m.Nome == modulo.Nome) != null))
+                    throw new ServiceException($"Já existe módulo cadastrado com o nome: {modulo.Nome}");
 
                 _moduloRepository.Insere(modulo);
                 await _moduloRepository.UnitOfWork.SaveChangesAsync();
@@ -65,16 +93,19 @@ namespace Seguranca.Service
         #endregion
 
         #region UpdateAsync
-        public async Task UpdateAsync(int moduloId, Modulo modulo)
+        public async Task UpdateAsync(int Id, Modulo modulo)
         {
             try
             {
-                if (moduloId != modulo.ModuloId)
-                { throw new ServiceException(moduloId + " Diferente " + modulo.ModuloId); }
+                if (Id != modulo.ModuloId) throw new ServiceException(
+                    $"Id informado é diferente do Id do módulo {modulo.ModuloId}");
+                
+                if (modulo.CreatedSystem) throw new ServiceException(
+                    $"O módulo {modulo.Nome} foi criado pelo sistema. Alteração inválida!");
 
                 _moduloRepository.Update(modulo);
                 await _moduloRepository.UnitOfWork.SaveChangesAsync();
-                
+
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
@@ -87,116 +118,17 @@ namespace Seguranca.Service
             try
             {
                 var modulo = await ObterAsync(moduloId);
-                if (modulo == null)
-                    throw new ServiceException($"Módulo com Id = {moduloId} não foi encontrado");
-                if (modulo.CreatedSystem)
-                    throw new ServiceException($"Módulo com Id = {moduloId} foi criado pelo sistema");
+                if (modulo == null) throw new ServiceException(
+                    $"O módulo com Id = {moduloId} não foi encontrado");
+
+                if (modulo.CreatedSystem) throw new ServiceException(
+                    $"O módulo {modulo.Nome} foi criado pelo sistema. Exclusão inválida!");
+
                 _moduloRepository.Remove(modulo);
                 await _moduloRepository.UnitOfWork.SaveChangesAsync();
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region ObterFormulariosAsync 
-        public async Task<ResultResponse> ObterFormulariosAsync(int moduloId)
-        {
-            var result = GetModulo(moduloId).Result;
-            if (!result.Succeeded) return result;
-            var modulo = (Modulo)result.ObjectRetorno;
-
-            var formularios = await _formularioRepository.ObterAsync();
-
-            foreach (var formulario in formularios)
-            {
-                var mf = modulo.ModuloFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
-                if (mf == null)
-                {
-                    formulario.Selected = false;
-                }
-                else
-                {
-                    formulario.Selected = true;
-                }
-            }
-
-            return (new ResultResponse()
-            {
-                Succeeded = true,
-                ObjectRetorno = formularios,
-                ObjectResult = (int)EObjectResult.OK,
-                Errors = new List<string>()
-            });
-        }
-        #endregion
-
-        #region AtualizarFormulariosAsync
-        public async Task<ResultResponse> AtualizarFormulariosAsync(int moduloId, List<Formulario> formularios)
-        {
-            var result = GetModulo(moduloId).Result;
-            if (!result.Succeeded) return result;
-            var modulo = (Modulo)result.ObjectRetorno;
-
-            foreach (var formulario in formularios)
-            {
-                var mf = modulo.ModuloFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
-                if (mf == null)
-                {
-                    if (formulario.Selected)
-                    {
-                        mf = (new ModuloFormulario()
-                        {
-                            ModuloId = moduloId,
-                            FormularioId = formulario.FormularioId
-                        });
-                        _moduloFormularioRepository.Insere(mf);
-                    }
-                }
-                else
-                {
-                    if (!formulario.Selected)
-                    {
-                        _moduloFormularioRepository.Remove(mf);
-                    }
-                }
-            }
-            await _moduloFormularioRepository.UnitOfWork.SaveChangesAsync();
-
-            return (new ResultResponse()
-            {
-                Succeeded = true,
-                ObjectRetorno = null,
-                ObjectResult = (int)EObjectResult.OK,
-                Errors = new List<string>()
-            });
-        }
-        #endregion
-
-        #region GetModulo
-        private async Task<ResultResponse> GetModulo(int moduloId)
-        {
-            var modulo = await _moduloRepository.ObterAsyncFull(moduloId);
-            if (modulo == null)
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = false,
-                    ObjectRetorno = null,
-                    ObjectResult = (int)EObjectResult.NotFound,
-                    Errors = new List<string>() { $"Módulo com Id = {moduloId} não foi encontrado" }
-                });
-            }
-            else
-            {
-                return (new ResultResponse()
-                {
-                    Succeeded = true,
-                    ObjectRetorno = modulo,
-                    ObjectResult = (int)EObjectResult.OK,
-                    Errors = new List<string>()
-                });
-            }
         }
         #endregion
     }

@@ -42,22 +42,29 @@ namespace Seguranca.API
             services.AddTransient<IEventoService, EventoService>();
             services.AddTransient<IFormularioRepository, FormularioRepositoryEFC>();
             services.AddTransient<IFormularioService, FormularioService>();
-
-            services.AddTransient<IPerfilUsuarioRepository, PerfilUsuarioRepositoryEFC>();
-            services.AddTransient<IRestricaoUsuarioRepository, RestricaoUsuarioRepositoryEFC>();
-            services.AddTransient<IRestricaoPerfilRepository, RestricaoPerfilRepositoryEFC>();
-            services.AddTransient<IModuloFormularioRepository, ModuloFormularioRepositoryEFC>();
-            services.AddTransient<IFormularioEventoRepository, FormularioEventoRepositoryEFC>();
-
             services.AddTransient<IModuloRepository, ModuloRepositoryEFC>();
             services.AddTransient<IModuloService, ModuloService>();
             services.AddTransient<IPerfilRepository, PerfilRepositoryEFC>();
             services.AddTransient<IPerfilService, PerfilService>();
+            services.AddTransient<IFuncaoRepository, FuncaoRepositoryEFC>();
+            services.AddTransient<IFuncaoService, FuncaoService>();
             services.AddTransient<IUsuarioRepository, UsuarioRepositoryEFC>();
             services.AddTransient<IUsuarioService, UsuarioService>();
 
+            services.AddTransient<IPerfilUsuarioRepository, PerfilUsuarioRepositoryEFC>();
+            services.AddTransient<IPerfilUsuarioService, PerfilUsuarioService>();
+            services.AddTransient<IRestricaoUsuarioRepository, RestricaoUsuarioRepositoryEFC>();
+            services.AddTransient<IRestricaoUsuarioService, RestricaoUsuarioService>();
+            services.AddTransient<IRestricaoPerfilRepository, RestricaoPerfilRepositoryEFC>();
+            services.AddTransient<IRestricaoPerfilService, RestricaoPerfilService>();
+            services.AddTransient<IModuloFormularioRepository, ModuloFormularioRepositoryEFC>();
+            services.AddTransient<IModuloFormularioService, ModuloFormularioService>();
+            services.AddTransient<IFormularioEventoRepository, FormularioEventoRepositoryEFC>();
+            services.AddTransient<IFormularioEventoService, FormularioEventoService>();
+           
             services.AddTransient<IRegisterClient, RegisterClient>();
             services.AddTransient<ILoginClient, LoginClient>();
+            services.AddTransient<ITrocaSenhaClient, TrocaSenhaClient>();
 
             //Controllers protegidos contra acesso anônimo exceto as actions que tenham o atributo
             services.AddControllersWithViews(config =>

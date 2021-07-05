@@ -15,7 +15,7 @@ namespace Seguranca.Domain.Models
         [DisplayName("Id")]
         public int PerfilId { get; set; }
 
-        [DisplayName("Nome")]
+        [DisplayName("Perfil")]
         [Required(ErrorMessage = "campo obrigatório")]
         [StringLength(100, ErrorMessage = "limite de caracteres excedido")]
         public string Nome { get; set; }
@@ -24,6 +24,12 @@ namespace Seguranca.Domain.Models
         [StringLength(50, ErrorMessage = "limite de caracteres excedido")]
         public string Descricao { get; set; }
 
+        [DisplayName("Função")]
+        [Required(ErrorMessage = "campo obrigatório")]
+        public int FuncaoId { get; set; }
+        public bool CreatedSystem { get; set; }
+
+        public virtual FuncaoModel Funcao { get; set; }
         public virtual ICollection<PerfilUsuarioModel> PerfilUsuario { get; set; }
         public virtual ICollection<RestricaoPerfilModel> RestricaoPerfil { get; set; }
     }

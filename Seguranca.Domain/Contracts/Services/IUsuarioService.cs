@@ -9,11 +9,11 @@ namespace Seguranca.Domain.Contracts.Services
     {
         Task<IEnumerable<Usuario>> ObterAsync();
         Task<Usuario> ObterAsync(int id);
-        Task InsereAsync(Usuario usuario);
         Task<Usuario> ObterAsync(string email);
-        Task<ResultResponse> ObterRestricoesAsync(int usuarioId);
-        Task<ResultResponse> AtualizarRestricoesAsync(int usuarioId, List<RestricaoUsuario> restricoes);
-        Task<ResultResponse> ObterPerfisAsync(int usuarioId);
-        Task<ResultResponse> AtualizarPerfisAsync(int usuarioId, List<PerfilUsuario> perfis);
+        Task<IEnumerable<Usuario>> GetFullAsync();
+        Task<Usuario> GetFullAsync(int id);
+        Task<Usuario> GetFullAsync(string nome);
+        Task InsereAsync(Usuario usuario);
+        Task<SegurancaModel> ObterIds(string usuario, string modulo);
     }
 }

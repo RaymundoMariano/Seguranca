@@ -9,9 +9,10 @@ namespace Seguranca.Domain.Contracts.Repositories
     {
         Task<IEnumerable<Usuario>> ObterAsync();
         Task<Usuario> ObterAsync(int id);
-        void Insere(Usuario usuario);
-        Task<IEnumerable<Usuario>> ObterAsyncFull();
-        Task<Usuario> ObterAsyncFull(int usuarioId);
         Task<Usuario> ObterAsync(string email);
+        Task<IEnumerable<Usuario>> GetFullAsync();
+        Task<Usuario> GetFullAsync(int id);
+        Task<Usuario> GetFullAsync(string nome);
+        void Insere(Usuario usuario);
     }
 }

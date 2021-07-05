@@ -7,7 +7,8 @@ namespace Seguranca.Domain.Contracts.Services
 {
     public interface IModuloService : IService<Modulo>
     {
-        Task<ResultResponse> ObterFormulariosAsync(int moduloId);
-        Task<ResultResponse> AtualizarFormulariosAsync(int moduloId, List<Formulario> fomularios);
+        Task<IEnumerable<Modulo>> GetFullAsync();
+        Task<Modulo> GetFullAsync(int moduloId);
+        Task<Modulo> GetFullAsync(string nome);
     }
 }

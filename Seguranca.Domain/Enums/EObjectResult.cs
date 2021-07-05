@@ -5,6 +5,7 @@
         BadRequest = 1,
         JsonResult,
         OK,
-        NotFound
+        NotFound,
+        ErroFatal
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Seguranca.Domain.Aplication.Responses;
 using Seguranca.Domain.Auth.Requests;
 using Seguranca.Domain.Auth.Responses;
 using Seguranca.Domain.Contracts.Clients.Auth;
@@ -19,60 +20,72 @@ namespace SEG.MVC.Controllers.Auth
     {
         private readonly IRegisterClient _registerClient;
         private readonly ILoginClient _loginClient;
+        private readonly ITrocaSenhaClient _trocaSenhaClient;
         private readonly IUsuarioService _usuarioService;
-        public AuthenticationsController(IRegisterClient registerClient, ILoginClient loginClient, IUsuarioService usuarioService)
+        public AuthenticationsController(
+            IRegisterClient registerClient, 
+            ILoginClient loginClient, 
+            ITrocaSenhaClient trocaSenhaClient,
+            IUsuarioService usuarioService)
         {
             _registerClient = registerClient;
             _loginClient = loginClient;
+            _trocaSenhaClient = trocaSenhaClient;
             _usuarioService = usuarioService;
         }
 
+        #region Register
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest user)
         {
-            var register = await _registerClient.RegisterAsync(user);
+            var result = ObterResult(await _registerClient.RegisterAsync(user));
+            if (!result.Succeeded) return BadRequest(result);
 
-            return await ObjectResult(ObterRegister(register), user);
+            var register = JsonConvert.DeserializeObject<RegisterResponse>(result.ObjectRetorno.ToString());
+
+            var usuario = new Usuario()
+            { Nome = register.UserName, Email = register.Email, CreatedSystem = true };
+            await _usuarioService.InsereAsync(usuario);
+
+            register.Seguranca = await _usuarioService.ObterIds(register.UserName, user.Modulo);
+            result.ObjectRetorno = register;
+            return Ok(result);
         }
+        #endregion
 
+        #region Login
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest user)
         {
-            var login = await _loginClient.LoginAsync(user);
+            var result = ObterResult(await _loginClient.LoginAsync(user));
+            if (!result.Succeeded) return BadRequest(result);
 
-            return await ObjectResult(ObterRegister(login), user);
+            var register = JsonConvert.DeserializeObject<RegisterResponse>(result.ObjectRetorno.ToString());
+            register.Seguranca = await _usuarioService.ObterIds(register.UserName, user.Modulo);
+            result.ObjectRetorno = register;
+            return Ok(result);
         }
+        #endregion
 
-        private async Task<IActionResult> ObjectResult(RegisterResponse register, object user)
+        #region TrocaSenha
+        [HttpPost]
+        [Route("TrocaSenha")]
+        public async Task<IActionResult> TrocaSenha([FromBody] TrocaSenhaRequest user)
         {
-            switch ((EObjectResult)register.ObjectResult)
-            {
-                case EObjectResult.BadRequest:
-                    return BadRequest(register);
-
-                case EObjectResult.JsonResult:
-                    return new JsonResult(register);
-
-                case EObjectResult.OK:
-                    if (user.GetType().Name == "RegisterRequest")
-                    {
-                        var usuario = new Usuario() { Nome = register.UserName, Email = register.Email };
-                        await _usuarioService.InsereAsync(usuario);
-                    }
-                    return Ok(register);
-
-                default:
-                    return BadRequest(register);
-            }
+            var result = ObterResult(await _trocaSenhaClient.TrocaSenhaAsync(user));
+            if (result.Succeeded) return Ok(result);
+            return BadRequest(result);
         }
+        #endregion
 
-        private RegisterResponse ObterRegister(HttpResponseMessage httpResponse)
+        #region ObterResult
+        private ResultResponse ObterResult(HttpResponseMessage httpResponse)
         {
             var conteudo = httpResponse.Content.ReadAsStringAsync().Result;
-
-            return JsonConvert.DeserializeObject<RegisterResponse>(conteudo);
+            return JsonConvert.DeserializeObject<ResultResponse>(conteudo);
         }
+        #endregion
     }
 }

@@ -12,8 +12,8 @@ namespace Seguranca.Data.EFC.Repositories
         {
         }
 
-        #region ObterAsyncFull
-        public async Task<IEnumerable<Formulario>> ObterAsyncFull()
+        #region GetFullAsync
+        public async Task<IEnumerable<Formulario>> GetFullAsync()
         {
             return await _segurancaContext.Formulario
                     .AsNoTracking()
@@ -28,7 +28,7 @@ namespace Seguranca.Data.EFC.Repositories
                     .ToListAsync();
         }
 
-        public async Task<Formulario> ObterAsyncFull(int formularioId)
+        public async Task<Formulario> GetFullAsync(int formularioId)
         {
             return await _segurancaContext.Formulario
                     .AsNoTracking()

@@ -7,7 +7,8 @@ namespace Seguranca.Domain.Contracts.Services
 {
     public interface IPerfilService : IService<Perfil>
     {
-        Task<ResultResponse> ObterRestricoesAsync(int perfilId);
-        Task<ResultResponse> AtualizarRestricoesAsync(int perfilId, List<RestricaoPerfil> restricoes);
+        Task<Perfil> GetFullAsync(string nome);
+        Task<IEnumerable<Perfil>> GetFullAsync();
+        Task<Perfil> GetFullAsync(int id);       
     }
 }

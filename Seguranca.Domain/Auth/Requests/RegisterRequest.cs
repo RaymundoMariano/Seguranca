@@ -17,5 +17,8 @@ namespace Seguranca.Domain.Auth.Requests
         [StringLength(40, ErrorMessage = "limite de caracteres excedido")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "campo obrigatório")]
+        public string Modulo { get; set; } = "SegurancaNet";
     }
 }
