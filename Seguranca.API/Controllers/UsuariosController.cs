@@ -41,7 +41,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var usuarios = await _usuarioService.GetFullAsync();
+                var usuarios = await _usuarioService.ObterAsync();
                 return (new ResultResponse()
                 {
                     Succeeded = true,
@@ -60,7 +60,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var usuario = await _usuarioService.GetFullAsync(usuarioId);
+                var usuario = await _usuarioService.ObterAsync(usuarioId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,

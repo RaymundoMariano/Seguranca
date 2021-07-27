@@ -100,11 +100,11 @@ namespace Seguranca.Service
         {
             try
             {
-                var perfil = await _perfilService.GetFullAsync(perfilId);
+                var perfil = await _perfilService.ObterAsync(perfilId);
 
                 var restricoes = new List<RestricaoPerfil>();
 
-                foreach (var modulo in await _moduloService.GetFullAsync())
+                foreach (var modulo in await _moduloService.ObterAsync())
                 {
                     if (modulo.Nome == "SegurancaNet") continue;
 
@@ -117,14 +117,14 @@ namespace Seguranca.Service
                         continue;
                     }
 
-                    if (modulo.ModuloFormulario.Count == 0)
+                    if (modulo.ModulosFormulario.Count == 0)
                     {
                         var restricao = await MontarRestricao(perfil, modulo, null, null);
                         restricoes.Add(restricao);
                     }
                     else
                     {
-                        foreach (var mf in modulo.ModuloFormulario)
+                        foreach (var mf in modulo.ModulosFormulario)
                         {
                             rp = await _restricaoPerfilRepository
                                 .ObterAsync(perfil.PerfilId, mf.ModuloId, mf.FormularioId, null);
@@ -135,14 +135,14 @@ namespace Seguranca.Service
                                 continue;
                             }
 
-                            if (mf.Formulario.FormularioEvento.Count == 0)
+                            if (mf.Formulario.FormulariosEvento.Count == 0)
                             {
                                 var restricao = await MontarRestricao(perfil, modulo, mf.Formulario, null);
                                 restricoes.Add(restricao);
                             }
                             else
                             {
-                                foreach (var fe in mf.Formulario.FormularioEvento)
+                                foreach (var fe in mf.Formulario.FormulariosEvento)
                                 {
                                     var restricao = await MontarRestricao(perfil, modulo, mf.Formulario, fe.Evento);
                                     restricoes.Add(restricao);
@@ -170,7 +170,7 @@ namespace Seguranca.Service
         {
             try
             {
-                var perfil = await _perfilService.GetFullAsync(perfilId);
+                var perfil = await _perfilService.ObterAsync(perfilId);
 
                 if (perfil.CreatedSystem) throw new ServiceException(
                     $"O perfil {perfil.Nome} foi criado pelo sistema. Operação inválida!");

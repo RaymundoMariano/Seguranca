@@ -106,13 +106,13 @@ namespace Seguranca.Service
         {
             try
             {
-                var modulo = await _moduloService.GetFullAsync(moduloId);
+                var modulo = await _moduloService.ObterAsync(moduloId);
 
                 var formularios = await _formularioService.ObterAsync();
 
                 foreach (var formulario in formularios)
                 {
-                    var mf = modulo.ModuloFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
+                    var mf = modulo.ModulosFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
                     if (mf == null)
                     {
                         formulario.Selected = false;
@@ -141,14 +141,14 @@ namespace Seguranca.Service
         {
             try
             {
-                var modulo = await _moduloService.GetFullAsync(moduloId);
+                var modulo = await _moduloService.ObterAsync(moduloId);
 
                 if (modulo.CreatedSystem) throw new ServiceException(
                     $"O módulo {modulo.Nome} foi criado pelo sistema. Operação inválida!");
 
                 foreach (var formulario in formularios)
                 {
-                    var mf = modulo.ModuloFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
+                    var mf = modulo.ModulosFormulario.FirstOrDefault(mf => mf.ModuloId == moduloId && mf.FormularioId == formulario.FormularioId);
                     if (mf == null)
                     {
                         if (formulario.Selected)

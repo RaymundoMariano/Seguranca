@@ -6,8 +6,8 @@ namespace Seguranca.Domain.Entities
     {
         public Usuario()
         {
-            PerfilUsuario = new HashSet<PerfilUsuario>();
-            RestricaoUsuario = new HashSet<RestricaoUsuario>();
+            PerfisUsuario = new HashSet<PerfilUsuario>();
+            RestricoesUsuario = new HashSet<RestricaoUsuario>();
         }
 
         public int UsuarioId { get; set; }
@@ -15,7 +15,7 @@ namespace Seguranca.Domain.Entities
         public string Email { get; set; }
         public bool CreatedSystem { get; set; }
 
-        public virtual ICollection<PerfilUsuario> PerfilUsuario { get; set; }
-        public virtual ICollection<RestricaoUsuario> RestricaoUsuario { get; set; }
+        public virtual ICollection<PerfilUsuario> PerfisUsuario { get; set; }
+        public virtual ICollection<RestricaoUsuario> RestricoesUsuario { get; set; }
     }
 }

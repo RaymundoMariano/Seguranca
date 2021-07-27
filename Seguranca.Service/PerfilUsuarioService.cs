@@ -125,7 +125,7 @@ namespace Seguranca.Service
                         pu = new PerfilUsuario();
                         pu.UsuarioId = usuarioId;
                         pu.ModuloId = modulo.ModuloId;
-                        pu.PerfilId = (await _perfilService.GetFullAsync("Sem Perfil")).PerfilId;
+                        pu.PerfilId = (await _perfilService.ObterAsync("Sem Perfil")).PerfilId;
                     }
                     pu.Modulo = modulo;
                     pu.Perfil = await _perfilService.ObterAsync((int)pu.PerfilId);

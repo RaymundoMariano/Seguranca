@@ -6,8 +6,8 @@ namespace Seguranca.Domain.Entities
     {
         public Perfil()
         {
-            PerfilUsuario = new HashSet<PerfilUsuario>();
-            RestricaoPerfil = new HashSet<RestricaoPerfil>();
+            PerfisUsuario = new HashSet<PerfilUsuario>();
+            RestricoesPerfil = new HashSet<RestricaoPerfil>();
         }
 
         public int PerfilId { get; set; }
@@ -17,7 +17,7 @@ namespace Seguranca.Domain.Entities
         public bool CreatedSystem { get; set; }
 
         public virtual Funcao Funcao { get; set; }
-        public virtual ICollection<PerfilUsuario> PerfilUsuario { get; set; }
-        public virtual ICollection<RestricaoPerfil> RestricaoPerfil { get; set; }
+        public virtual ICollection<PerfilUsuario> PerfisUsuario { get; set; }
+        public virtual ICollection<RestricaoPerfil> RestricoesPerfil { get; set; }
     }
 }

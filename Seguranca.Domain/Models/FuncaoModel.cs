@@ -9,8 +9,8 @@ namespace Seguranca.Domain.Models
         public int FuncaoId { get; set; }
 
         [DisplayName("Função")]
-        [Required(ErrorMessage = "campo obrigatório")]
-        [StringLength(100, ErrorMessage = "limite de caracteres excedido")]
+        [Required(ErrorMessage = "Campo obrigatório!")]
+        [StringLength(100, ErrorMessage = "Limite de caracteres excedido!")]
         public string Nome { get; set; }
         public bool CreatedSystem { get; set; }
 

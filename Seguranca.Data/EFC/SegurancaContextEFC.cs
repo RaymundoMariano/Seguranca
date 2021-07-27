@@ -18,17 +18,17 @@ namespace Seguranca.Data.EFC
             new DbInitializer(this);
         }
 
-        public virtual DbSet<Evento> Evento { get; set; }
-        public virtual DbSet<Formulario> Formulario { get; set; }
-        public virtual DbSet<FormularioEvento> FormularioEvento { get; set; }
-        public virtual DbSet<Funcao> Funcao { get; set; }
-        public virtual DbSet<Modulo> Modulo { get; set; }
-        public virtual DbSet<ModuloFormulario> ModuloFormulario { get; set; }
-        public virtual DbSet<Perfil> Perfil { get; set; }
-        public virtual DbSet<PerfilUsuario> PerfilUsuario { get; set; }
-        public virtual DbSet<RestricaoPerfil> RestricaoPerfil { get; set; }
-        public virtual DbSet<RestricaoUsuario> RestricaoUsuario { get; set; }
-        public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Evento> Eventos { get; set; }
+        public virtual DbSet<Formulario> Formularios { get; set; }
+        public virtual DbSet<FormularioEvento> FormulariosEvento { get; set; }
+        public virtual DbSet<Funcao> Funcoes { get; set; }
+        public virtual DbSet<Modulo> Modulos { get; set; }
+        public virtual DbSet<ModuloFormulario> ModulosFormulario { get; set; }
+        public virtual DbSet<Perfil> Perfis { get; set; }
+        public virtual DbSet<PerfilUsuario> PerfisUsuario { get; set; }
+        public virtual DbSet<RestricaoPerfil> RestricoesPerfil { get; set; }
+        public virtual DbSet<RestricaoUsuario> RestricoesUsuario { get; set; }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
         
         public Task<int> SaveChangesAsync()
         {

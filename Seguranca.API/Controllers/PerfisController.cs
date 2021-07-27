@@ -38,7 +38,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var perfis = await _perfilService.GetFullAsync();
+                var perfis = await _perfilService.ObterAsync();
                 return (new ResultResponse()
                 {
                     Succeeded = true,
@@ -57,7 +57,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var perfil = await _perfilService.GetFullAsync(perfilId);
+                var perfil = await _perfilService.ObterAsync(perfilId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,

@@ -57,7 +57,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var formulario = await _formularioService.GetFullAsync(formularioId);
+                var formulario = await _formularioService.ObterAsync(formularioId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,

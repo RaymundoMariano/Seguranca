@@ -15,63 +15,63 @@ namespace Seguranca.Data.EFC.Repositories
         #region GetFullAsync
         public async Task<IEnumerable<Modulo>> GetFullAsync()
         {
-            return await _segurancaContext.Modulo
+            return await _segurancaContext.Modulos
                     .AsNoTracking()
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoPerfil)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesPerfil)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoUsuario)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesUsuario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
                     .ToListAsync();
         }
 
         public async Task<Modulo> GetFullAsync(int moduloId)
         {
-            return await _segurancaContext.Modulo
+            return await _segurancaContext.Modulos
                     .AsNoTracking()
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoPerfil)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesPerfil)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoUsuario)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesUsuario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
                     .FirstOrDefaultAsync(m => m.ModuloId == moduloId);
         }
 
         public async Task<Modulo> GetFullAsync(string nome)
         {
-            return await _segurancaContext.Modulo
+            return await _segurancaContext.Modulos
                     .AsNoTracking()
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoPerfil)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesPerfil)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
-                    .Include(m => m.RestricaoUsuario)
-                    .Include(m => m.ModuloFormulario)
+                    .Include(m => m.RestricoesUsuario)
+                    .Include(m => m.ModulosFormulario)
                         .ThenInclude(m => m.Formulario)
-                            .ThenInclude(m => m.FormularioEvento)
+                            .ThenInclude(m => m.FormulariosEvento)
                                 .ThenInclude(m => m.Evento)
                     .FirstOrDefaultAsync(m => m.Nome == nome);
         }

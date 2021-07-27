@@ -28,28 +28,6 @@ namespace Seguranca.Service
         }
 
         #region GetFullAsync
-        public async Task<IEnumerable<Usuario>> GetFullAsync()
-        {
-            try
-            {
-                return await _usuarioRepository.GetFullAsync();
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-
-        public async Task<Usuario> GetFullAsync(int usuarioId)
-        {
-            try
-            {
-                var usuario = await _usuarioRepository.GetFullAsync(usuarioId);
-                if (usuario == null)
-                    throw new ServiceException($"Usuário com Id = {usuarioId} não foi encontrado");
-                return usuario;
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-
         public async Task<Usuario> GetFullAsync(string nome)
         {
             try
@@ -69,7 +47,7 @@ namespace Seguranca.Service
         {
             try
             {
-                return await _usuarioRepository.ObterAsync();
+                return await _usuarioRepository.GetFullAsync();
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
@@ -78,7 +56,7 @@ namespace Seguranca.Service
         {
             try
             {
-                var usuario = await _usuarioRepository.ObterAsync(usuarioId);
+                var usuario = await _usuarioRepository.GetFullAsync(usuarioId);
                 if (usuario == null)
                     throw new ServiceException($"Usuário com Id = {usuarioId} não foi encontrado");
                 return usuario;
@@ -116,16 +94,18 @@ namespace Seguranca.Service
                 _usuarioRepository.Insere(usuario);
                 await _usuarioRepository.UnitOfWork.SaveChangesAsync();
 
+                var pu = new PerfilUsuario()
+                {
+                    UsuarioId = usuario.UsuarioId,
+                    ModuloId = 1,
+                    PerfilId = (await _perfilSevice.ObterAsync("Sem Perfil")).PerfilId
+                };
                 if (usuario.UsuarioId == 1)
                 {
-                    var pu = new PerfilUsuario() { 
-                        UsuarioId = 1, 
-                        ModuloId = 1, 
-                        PerfilId = (await _perfilSevice.GetFullAsync("Master")).PerfilId, 
-                        CreatedSystem = true 
-                    };
-                    await _perfilUsuarioService.InsereAsync(pu);
+                    pu.PerfilId = (await _perfilSevice.ObterAsync("Master")).PerfilId;
+                    pu.CreatedSystem = true;
                 }
+                await _perfilUsuarioService.InsereAsync(pu);
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
@@ -136,10 +116,10 @@ namespace Seguranca.Service
         public async Task<Seguranca.Domain.SegurancaModel> ObterIds(string nomeUsuario, string nomeModulo)
         {
             var usuario = await GetFullAsync(nomeUsuario);
-            var modulo = await _moduloSevice.GetFullAsync(nomeModulo);
-            var perfil = await _perfilSevice.GetFullAsync("Sem Perfil");
+            var modulo = await _moduloSevice.ObterAsync(nomeModulo);
+            var perfil = await _perfilSevice.ObterAsync("Sem Perfil");
 
-            var pu = usuario.PerfilUsuario.FirstOrDefault(pu =>
+            var pu = usuario.PerfisUsuario.FirstOrDefault(pu =>
                 pu.UsuarioId == usuario.UsuarioId && pu.ModuloId == modulo.ModuloId);
             if (pu == null)
             {

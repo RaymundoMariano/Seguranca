@@ -16,19 +16,19 @@ namespace Seguranca.Service
         {
             _perfilRepository = perfilRepository;
         }
-
-        #region GetFullAsync
-        public async Task<IEnumerable<Perfil>> GetFullAsync()
+        
+        #region ObterAsync
+        public async Task<IEnumerable<Perfil>> ObterAsync()
         {
             try 
-            { 
+            {
                 var perfis = await _perfilRepository.GetFullAsync();
                 return perfis.Where(p => p.Nome != "Master").ToList();
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
-        public async Task<Perfil> GetFullAsync(int perfilId)
+        public async Task<Perfil> ObterAsync(int perfilId)
         {
             try
             {
@@ -41,38 +41,13 @@ namespace Seguranca.Service
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
-        public async Task<Perfil> GetFullAsync(string nome)
+        public async Task<Perfil> ObterAsync(string nome)
         {
             try
             {
                 var perfil = await _perfilRepository.GetFullAsync(nome);
                 if (perfil == null)
                     throw new ServiceException($"Perfil com nome = { nome } não foi encontrado");
-                return perfil;
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region ObterAsync
-        public async Task<IEnumerable<Perfil>> ObterAsync()
-        {
-            try 
-            {
-                var perfis = await _perfilRepository.ObterAsync();
-                return perfis.Where(p => p.Nome != "Master").ToList();
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-
-        public async Task<Perfil> ObterAsync(int perfilId)
-        {
-            try
-            {
-                var perfil = await _perfilRepository.ObterAsync(perfilId);
-                if (perfil == null)
-                    throw new ServiceException($"Perfil com Id = { perfilId } não foi encontrado");
                 return perfil;
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
@@ -128,6 +103,10 @@ namespace Seguranca.Service
                 if (perfil.CreatedSystem) throw new ServiceException(
                     $"O perfil {perfil.Nome} foi criado pelo sistema. Exclusão inválida!");
 
+                if (perfil.PerfisUsuario.Count != 0 || perfil.RestricoesPerfil.Count != 0) 
+                    throw new ServiceException(
+                        $"O perfil {perfil.Nome} está em uso. Exclusão inválida!");
+                
                 _perfilRepository.Remove(perfil);
                 await _perfilRepository.UnitOfWork.SaveChangesAsync();
             }
@@ -135,5 +114,5 @@ namespace Seguranca.Service
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
         #endregion        
-    }
+    }    
 }

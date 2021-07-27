@@ -15,48 +15,48 @@ namespace Seguranca.Data.EFC.Repositories
         #region GetFullAsync
         public async Task<IEnumerable<Perfil>> GetFullAsync()
         {
-            return await _segurancaContext.Perfil
+            return await _segurancaContext.Perfis
                     .AsNoTracking()
                     .Include(p => p.Funcao)
-                    .Include(p => p.PerfilUsuario)
+                    .Include(p => p.PerfisUsuario)
                         .ThenInclude(p => p.Usuario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Modulo)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Formulario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Evento)
                     .ToListAsync();
         }
 
         public async Task<Perfil> GetFullAsync(int perfilId)
         {
-            return await _segurancaContext.Perfil
+            return await _segurancaContext.Perfis
                     .AsNoTracking()
                     .Include(p => p.Funcao)
-                    .Include(p => p.PerfilUsuario)
+                    .Include(p => p.PerfisUsuario)
                         .ThenInclude(p => p.Usuario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Modulo)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Formulario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Evento)
                     .FirstOrDefaultAsync(p => p.PerfilId == perfilId);
         }
 
         public async Task<Perfil> GetFullAsync(string nome)
         {
-            return await _segurancaContext.Perfil
+            return await _segurancaContext.Perfis
                     .AsNoTracking()
                     .Include(p => p.Funcao)
-                    .Include(p => p.PerfilUsuario)
+                    .Include(p => p.PerfisUsuario)
                         .ThenInclude(p => p.Usuario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Modulo)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Formulario)
-                    .Include(p => p.RestricaoPerfil)
+                    .Include(p => p.RestricoesPerfil)
                         .ThenInclude(p => p.Evento)
                     .FirstOrDefaultAsync(p => p.Nome == nome);
         }

@@ -9,12 +9,12 @@ namespace Seguranca.Domain.Models
         public int EventoId { get; set; }
 
         [DisplayName("Evento")]
-        [Required(ErrorMessage = "campo obrigatório")]
-        [StringLength(100, ErrorMessage = "limite de caracteres excedido")]
+        [Required(ErrorMessage = "Campo obrigatório!")]
+        [StringLength(100, ErrorMessage = "Limite de caracteres excedido!")]
         public string Nome { get; set; }
 
         [DisplayName("Descrição")]
-        [StringLength(50, ErrorMessage = "limite de caracteres excedido")]
+        [StringLength(50, ErrorMessage = "Limite de caracteres excedido!")]
         public string Descricao { get; set; }
         public bool CreatedSystem { get; set; }
     }

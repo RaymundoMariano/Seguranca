@@ -12,24 +12,24 @@ namespace Seguranca.Data.EFC.Repositories
         {
         }
 
-        #region ObterAsyncFull
-        public async Task<IEnumerable<Evento>> ObterAsyncFull()
+        #region GetFullAsync
+        public async Task<IEnumerable<Evento>> GetFullAsync()
         {
-            return await _segurancaContext.Evento
+            return await _segurancaContext.Eventos
                     .AsNoTracking()
-                    .Include(e => e.FormularioEvento)
-                    .Include(e => e.RestricaoPerfil)
-                    .Include(e => e.RestricaoUsuario)
+                    .Include(e => e.FormulariosEvento)
+                    .Include(e => e.RestricoesPerfil)
+                    .Include(e => e.RestricoesUsuario)
                     .ToListAsync();
         }
 
-        public async Task<Evento> ObterAsyncFull(int eventoId)
+        public async Task<Evento> GetFullAsync(int eventoId)
         {
-            return await _segurancaContext.Evento
+            return await _segurancaContext.Eventos
                     .AsNoTracking()
-                    .Include(e => e.FormularioEvento)
-                    .Include(e => e.RestricaoPerfil)
-                    .Include(e => e.RestricaoUsuario)
+                    .Include(e => e.FormulariosEvento)
+                    .Include(e => e.RestricoesPerfil)
+                    .Include(e => e.RestricoesUsuario)
                     .FirstOrDefaultAsync(e => e.EventoId == eventoId);
         }
         #endregion

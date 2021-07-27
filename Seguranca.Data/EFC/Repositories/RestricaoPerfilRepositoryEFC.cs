@@ -14,7 +14,7 @@ namespace Seguranca.Data.EFC.Repositories
         #region ObterAsync
         public async Task<RestricaoPerfil> ObterAsync(int perfilId, int? moduloId, int? formularioId, int? eventoId)
         {
-            return await _segurancaContext.RestricaoPerfil.FirstOrDefaultAsync(rp =>
+            return await _segurancaContext.RestricoesPerfil.FirstOrDefaultAsync(rp =>
                 rp.PerfilId == perfilId && 
                 rp.ModuloId == moduloId && 
                 rp.FormularioId == formularioId &&

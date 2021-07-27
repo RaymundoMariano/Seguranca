@@ -19,7 +19,7 @@ namespace Seguranca.Data.EFC.Repositories
         #region GetFullAsync
         public async Task<IEnumerable<Funcao>> GetFullAsync()
         {
-            return await _segurancaContext.Funcao
+            return await _segurancaContext.Funcoes
                     .AsNoTracking()
                     .Include(p => p.Perfil)
                     .ToListAsync();
@@ -27,7 +27,7 @@ namespace Seguranca.Data.EFC.Repositories
 
         public async Task<Funcao> GetFullAsync(int FuncaoId)
         {
-            return await _segurancaContext.Funcao
+            return await _segurancaContext.Funcoes
                     .AsNoTracking()
                     .Include(p => p.Perfil)
                     .FirstOrDefaultAsync(p => p.FuncaoId == FuncaoId);

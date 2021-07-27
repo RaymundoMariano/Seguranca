@@ -57,7 +57,7 @@ namespace Seguranca.API.Controllers
         {
             try
             {
-                var modulo = await _moduloService.GetFullAsync(moduloId);
+                var modulo = await _moduloService.ObterAsync(moduloId);
                 return (new ResultResponse()
                 {
                     Succeeded = true,

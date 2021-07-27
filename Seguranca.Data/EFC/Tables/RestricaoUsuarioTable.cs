@@ -14,25 +14,25 @@ namespace Seguranca.Data.EFC.Tables
                 .IsUnique();
 
             builder.HasOne(d => d.Evento)
-                .WithMany(p => p.RestricaoUsuario)
+                .WithMany(p => p.RestricoesUsuario)
                 .HasForeignKey(d => d.EventoId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("RestricaoUsuario_Evento");
 
             builder.HasOne(d => d.Formulario)
-                .WithMany(p => p.RestricaoUsuario)
+                .WithMany(p => p.RestricoesUsuario)
                 .HasForeignKey(d => d.FormularioId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("RestricaoUsuario_Formulario");
 
             builder.HasOne(d => d.Modulo)
-                .WithMany(p => p.RestricaoUsuario)
+                .WithMany(p => p.RestricoesUsuario)
                 .HasForeignKey(d => d.ModuloId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("RestricaoUsuario_Modulo");
 
             builder.HasOne(d => d.Usuario)
-                .WithMany(p => p.RestricaoUsuario)
+                .WithMany(p => p.RestricoesUsuario)
                 .HasForeignKey(d => d.UsuarioId)
                 .HasConstraintName("RestricaoUsuario_Usuario");
         }

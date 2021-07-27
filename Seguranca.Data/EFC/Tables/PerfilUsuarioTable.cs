@@ -14,18 +14,18 @@ namespace Seguranca.Data.EFC.Tables
                 .IsUnique();
 
             builder.HasOne(d => d.Modulo)
-                .WithMany(p => p.PerfilUsuario)
+                .WithMany(p => p.PerfisUsuario)
                 .HasForeignKey(d => d.ModuloId)
                 .HasConstraintName("PerfilUsuario_Modulo");
 
             builder.HasOne(d => d.Perfil)
-                .WithMany(p => p.PerfilUsuario)
+                .WithMany(p => p.PerfisUsuario)
                 .HasForeignKey(d => d.PerfilId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("PerfilUsuario_Perfil");
 
             builder.HasOne(d => d.Usuario)
-                .WithMany(p => p.PerfilUsuario)
+                .WithMany(p => p.PerfisUsuario)
                 .HasForeignKey(d => d.UsuarioId)
                 .HasConstraintName("PerfilUsuario_Usuario");
 

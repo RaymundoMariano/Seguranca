@@ -6,10 +6,10 @@ namespace Seguranca.Domain.Entities
     {
         public Formulario()
         {
-            FormularioEvento = new HashSet<FormularioEvento>();
-            ModuloFormulario = new HashSet<ModuloFormulario>();
-            RestricaoPerfil = new HashSet<RestricaoPerfil>();
-            RestricaoUsuario = new HashSet<RestricaoUsuario>();
+            FormulariosEvento = new HashSet<FormularioEvento>();
+            ModulosFormulario = new HashSet<ModuloFormulario>();
+            RestricoesPerfil = new HashSet<RestricaoPerfil>();
+            RestricoesUsuario = new HashSet<RestricaoUsuario>();
         }
 
         public int FormularioId { get; set; }
@@ -17,9 +17,9 @@ namespace Seguranca.Domain.Entities
         public string Descricao { get; set; }
         public bool CreatedSystem { get; set; }
 
-        public virtual ICollection<FormularioEvento> FormularioEvento { get; set; }
-        public virtual ICollection<ModuloFormulario> ModuloFormulario { get; set; }
-        public virtual ICollection<RestricaoPerfil> RestricaoPerfil { get; set; }
-        public virtual ICollection<RestricaoUsuario> RestricaoUsuario { get; set; }
+        public virtual ICollection<FormularioEvento> FormulariosEvento { get; set; }
+        public virtual ICollection<ModuloFormulario> ModulosFormulario { get; set; }
+        public virtual ICollection<RestricaoPerfil> RestricoesPerfil { get; set; }
+        public virtual ICollection<RestricaoUsuario> RestricoesUsuario { get; set; }
     }
 }

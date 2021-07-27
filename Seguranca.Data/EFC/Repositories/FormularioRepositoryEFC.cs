@@ -15,30 +15,30 @@ namespace Seguranca.Data.EFC.Repositories
         #region GetFullAsync
         public async Task<IEnumerable<Formulario>> GetFullAsync()
         {
-            return await _segurancaContext.Formulario
+            return await _segurancaContext.Formularios
                     .AsNoTracking()
-                    .Include(f => f.FormularioEvento)
+                    .Include(f => f.FormulariosEvento)
                         .ThenInclude(f => f.Evento)
-                    .Include(f => f.ModuloFormulario)
+                    .Include(f => f.ModulosFormulario)
                         .ThenInclude(f => f.Modulo)
-                    .Include(f => f.RestricaoPerfil)
+                    .Include(f => f.RestricoesPerfil)
                         .ThenInclude(f => f.Evento)
-                    .Include(f => f.RestricaoUsuario)
+                    .Include(f => f.RestricoesUsuario)
                         .ThenInclude(f => f.Evento)
                     .ToListAsync();
         }
 
         public async Task<Formulario> GetFullAsync(int formularioId)
         {
-            return await _segurancaContext.Formulario
+            return await _segurancaContext.Formularios
                     .AsNoTracking()
-                    .Include(f => f.FormularioEvento)
+                    .Include(f => f.FormulariosEvento)
                         .ThenInclude(f => f.Evento)
-                    .Include(f => f.ModuloFormulario)
+                    .Include(f => f.ModulosFormulario)
                         .ThenInclude(f => f.Modulo)
-                    .Include(f => f.RestricaoPerfil)
+                    .Include(f => f.RestricoesPerfil)
                         .ThenInclude(f => f.Evento)
-                    .Include(f => f.RestricaoUsuario)
+                    .Include(f => f.RestricoesUsuario)
                         .ThenInclude(f => f.Evento)
                     .FirstOrDefaultAsync(f => f.FormularioId == formularioId);
         }

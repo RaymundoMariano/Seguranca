@@ -23,7 +23,7 @@ namespace Seguranca.Service
         {
             try 
             { 
-                return await _eventoRepository.ObterAsync(); 
+                return await _eventoRepository.GetFullAsync(); 
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
@@ -32,7 +32,7 @@ namespace Seguranca.Service
         {
             try
             {
-                var evento = await _eventoRepository.ObterAsync(id);
+                var evento = await _eventoRepository.GetFullAsync(id);
                 if (evento == null)
                     throw new ServiceException($"O evento com Id {id} não foi encontrado");
                 return evento;
@@ -84,11 +84,16 @@ namespace Seguranca.Service
             try
             {
                 var evento = await ObterAsync(id);
+
                 if (evento == null) throw new ServiceException(
                     $"O evento com Id = {id} não foi encontrado");
 
                 if (evento.CreatedSystem) throw new ServiceException(
                     $"O evento {evento.Nome} foi criado pelo sistema. Exclusão inválida!");
+
+                if (evento.FormulariosEvento.Count != 0 || evento.RestricoesPerfil.Count != 0 ||
+                    evento.RestricoesUsuario.Count != 0 ) throw new ServiceException(
+                        $"O evento {evento.Nome} está em uso. Exclusão inválida!");
 
                 _eventoRepository.Remove(evento);
                 await _eventoRepository.UnitOfWork.SaveChangesAsync();

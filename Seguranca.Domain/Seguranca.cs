@@ -31,12 +31,12 @@ namespace Seguranca.Domain
                 return;
             }
 
-            foreach (var mf in Modulo.ModuloFormulario)
+            foreach (var mf in Modulo.ModulosFormulario)
             {
                 Formularios.Add(mf.Formulario);
             }
 
-            var pu = Usuario.PerfilUsuario.FirstOrDefault(pu =>
+            var pu = Usuario.PerfisUsuario.FirstOrDefault(pu =>
                 pu.UsuarioId == Usuario.UsuarioId && pu.ModuloId == Modulo.ModuloId);
             if (pu == null || pu.Perfil.Nome == "Sem Perfil")
             {
@@ -65,7 +65,7 @@ namespace Seguranca.Domain
         /// <returns></returns>
         public string TemPermissao(string formularioNome)
         {
-            var mf = Modulo.ModuloFormulario.FirstOrDefault(mf =>
+            var mf = Modulo.ModulosFormulario.FirstOrDefault(mf =>
                 mf.ModuloId == Modulo.ModuloId && mf.Formulario.Nome == formularioNome);
             if (mf == null)
             {
@@ -90,11 +90,11 @@ namespace Seguranca.Domain
         {
             if (TemPermissao(formularioNome) != null) return Mensagem;
 
-            var mf = Modulo.ModuloFormulario.FirstOrDefault(mf =>
+            var mf = Modulo.ModulosFormulario.FirstOrDefault(mf =>
                 mf.ModuloId == Modulo.ModuloId && mf.Formulario.Nome == formularioNome);
 
             bool existeEvento = false;
-            foreach (var fe in mf.Formulario.FormularioEvento)
+            foreach (var fe in mf.Formulario.FormulariosEvento)
             {
                 if (fe.Evento.Nome == eventoNome)
                 {
@@ -117,7 +117,7 @@ namespace Seguranca.Domain
         #region TemPermissaoPerfil
         private string TemPermissaoPerfil()
         {
-            var rp = Perfil.RestricaoPerfil.FirstOrDefault(rp =>
+            var rp = Perfil.RestricoesPerfil.FirstOrDefault(rp =>
                 rp.PerfilId == Perfil.PerfilId &&
                 rp.ModuloId == Modulo.ModuloId &&
                 rp.FormularioId == null &&
@@ -132,7 +132,7 @@ namespace Seguranca.Domain
         #region TemPermissaoUsuario
         private string TemPermissaoUsuario()
         {
-            var ru = Usuario.RestricaoUsuario.FirstOrDefault(ru =>
+            var ru = Usuario.RestricoesUsuario.FirstOrDefault(ru =>
                 ru.UsuarioId == Usuario.UsuarioId &&
                 ru.ModuloId == Modulo.ModuloId &&
                 ru.FormularioId == null &&
@@ -147,7 +147,7 @@ namespace Seguranca.Domain
         #region TemPermissaoPerfilFormulario
         private string TemPermissaoPerfilFormulario(string formularioNome)
         {
-            var rp = Perfil.RestricaoPerfil.FirstOrDefault(rp =>
+            var rp = Perfil.RestricoesPerfil.FirstOrDefault(rp =>
                 rp.PerfilId == Perfil.PerfilId &&
                 rp.ModuloId == Modulo.ModuloId &&
                 rp.FormularioId == Formularios.Find(f => f.Nome == formularioNome).FormularioId &&
@@ -162,7 +162,7 @@ namespace Seguranca.Domain
         #region TemPermissaoUsuarioFormulario
         private string TemPermissaoUsuarioFormulario(string formularioNome)
         {
-            var ru = Usuario.RestricaoUsuario.FirstOrDefault(ru =>
+            var ru = Usuario.RestricoesUsuario.FirstOrDefault(ru =>
                 ru.UsuarioId == Usuario.UsuarioId &&
                 ru.ModuloId == Modulo.ModuloId &&
                 ru.FormularioId == Formularios.Find(f => f.Nome == formularioNome).FormularioId &&
@@ -179,7 +179,7 @@ namespace Seguranca.Domain
         {
             var eventos = ObterEventos(formularioNome);
 
-            var rp = Perfil.RestricaoPerfil.FirstOrDefault(rp =>
+            var rp = Perfil.RestricoesPerfil.FirstOrDefault(rp =>
                 rp.PerfilId == Perfil.PerfilId &&
                 rp.ModuloId == Modulo.ModuloId &&
                 rp.FormularioId == Formularios.Find(f => f.Nome == formularioNome).FormularioId &&
@@ -196,7 +196,7 @@ namespace Seguranca.Domain
         {
             var eventos = ObterEventos(formularioNome);
 
-            var ru = Usuario.RestricaoUsuario.FirstOrDefault(ru =>
+            var ru = Usuario.RestricoesUsuario.FirstOrDefault(ru =>
                 ru.UsuarioId == Usuario.UsuarioId &&
                 ru.ModuloId == Modulo.ModuloId &&
                 ru.FormularioId == Formularios.Find(f => f.Nome == formularioNome).FormularioId &&
@@ -213,10 +213,10 @@ namespace Seguranca.Domain
         {
             var eventos = new List<EventoModel>();
 
-            var mf = Modulo.ModuloFormulario.FirstOrDefault(mf =>
+            var mf = Modulo.ModulosFormulario.FirstOrDefault(mf =>
                 mf.ModuloId == Modulo.ModuloId &&
                 mf.FormularioId == Formularios.Find(f => f.Nome == formularioNome).FormularioId);
-            foreach (var fe in mf.Formulario.FormularioEvento)
+            foreach (var fe in mf.Formulario.FormulariosEvento)
             {
                 eventos.Add(fe.Evento);
             }

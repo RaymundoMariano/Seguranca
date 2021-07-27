@@ -6,7 +6,7 @@ namespace Seguranca.Domain.Contracts.Repositories
 {
     public interface IEventoRepository : IRepository<Evento>
     {
-        Task<IEnumerable<Evento>> ObterAsyncFull();
-        Task<Evento> ObterAsyncFull(int id);
+        Task<IEnumerable<Evento>> GetFullAsync();
+        Task<Evento> GetFullAsync(int id);
     }
 }

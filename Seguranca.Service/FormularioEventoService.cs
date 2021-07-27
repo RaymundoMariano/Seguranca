@@ -107,13 +107,13 @@ namespace Seguranca.Service
         {
             try
             {
-                var formulario = await _formularioService.GetFullAsync(formularioId);
+                var formulario = await _formularioService.ObterAsync(formularioId);
 
                 var eventos = await _eventoService.ObterAsync();
 
                 foreach (var evento in eventos)
                 {
-                    var fv = formulario.FormularioEvento.FirstOrDefault(fv =>
+                    var fv = formulario.FormulariosEvento.FirstOrDefault(fv =>
                         fv.FormularioId == formularioId && fv.EventoId == evento.EventoId);
                     if (fv == null)
                     {
@@ -143,14 +143,14 @@ namespace Seguranca.Service
         {
             try
             {
-                var formulario = await _formularioService.GetFullAsync(formularioId);
+                var formulario = await _formularioService.ObterAsync(formularioId);
 
                 if (formulario.CreatedSystem) throw new ServiceException(
                     $"O formulário {formulario.Nome} foi criado pelo sistema. Operação inválida!");
 
                 foreach (var evento in eventos)
                 {
-                    var fv = formulario.FormularioEvento.FirstOrDefault(fv => fv.FormularioId == formularioId && fv.EventoId == evento.EventoId);
+                    var fv = formulario.FormulariosEvento.FirstOrDefault(fv => fv.FormularioId == formularioId && fv.EventoId == evento.EventoId);
                     if (fv == null)
                     {
                         if (evento.Selected)

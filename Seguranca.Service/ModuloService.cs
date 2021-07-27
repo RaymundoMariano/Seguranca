@@ -17,14 +17,17 @@ namespace Seguranca.Service
             _moduloRepository = moduloRepository;
         }
 
-        #region GetFullAsync
-        public async Task<IEnumerable<Modulo>> GetFullAsync()
+        #region ObterAsync
+        public async Task<IEnumerable<Modulo>> ObterAsync()
         {
-            try { return await _moduloRepository.GetFullAsync(); }
+            try 
+            { 
+                return await _moduloRepository.GetFullAsync(); 
+            }
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
-        public async Task<Modulo> GetFullAsync(int moduloId)
+        public async Task<Modulo> ObterAsync(int moduloId)
         {
             try
             {
@@ -37,37 +40,13 @@ namespace Seguranca.Service
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
-        public async Task<Modulo> GetFullAsync(string nome)
+        public async Task<Modulo> ObterAsync(string nome)
         {
             try
             {
                 var modulo = await _moduloRepository.GetFullAsync(nome);
                 if (modulo == null)
                     throw new ServiceException($"O módulo {nome} não foi encontrado");
-                return modulo;
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region ObterAsync
-        public async Task<IEnumerable<Modulo>> ObterAsync()
-        {
-            try 
-            { 
-                return await _moduloRepository.ObterAsync(); 
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-
-        public async Task<Modulo> ObterAsync(int moduloId)
-        {
-            try
-            {
-                var modulo = await _moduloRepository.ObterAsync(moduloId);
-                if (modulo == null)
-                    throw new ServiceException($"Módulo com Id = {moduloId} não foi encontrado");
                 return modulo;
             }
             catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
@@ -123,6 +102,11 @@ namespace Seguranca.Service
 
                 if (modulo.CreatedSystem) throw new ServiceException(
                     $"O módulo {modulo.Nome} foi criado pelo sistema. Exclusão inválida!");
+
+                if (modulo.PerfisUsuario.Count != 0 || modulo.ModulosFormulario.Count != 0 ||
+                    modulo.RestricoesPerfil.Count != 0 || modulo.RestricoesUsuario.Count != 0)
+                    throw new ServiceException(
+                        $"O módulo {modulo.Nome} está em uso. Exclusão inválida!");
 
                 _moduloRepository.Remove(modulo);
                 await _moduloRepository.UnitOfWork.SaveChangesAsync();

@@ -17,8 +17,8 @@ namespace Seguranca.Service
             _formularioRepository = formularioRepository;
         }
 
-        #region GetFullAsync
-        public async Task<IEnumerable<Formulario>> GetFullAsync()
+        #region ObterAsync
+        public async Task<IEnumerable<Formulario>> ObterAsync()
         {
             try 
             { 
@@ -27,35 +27,11 @@ namespace Seguranca.Service
             catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
         }
 
-        public async Task<Formulario> GetFullAsync(int formularioId)
-        {
-            try
-            {
-                var formulario = await _formularioRepository.GetFullAsync(formularioId);
-                if (formulario == null)
-                    throw new ServiceException($"Formulário com Id = {formularioId} não foi encontrado");
-                return formulario;
-            }
-            catch (ServiceException ex) { throw new ServiceException(ex.Message, ex.InnerException); }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-        #endregion
-
-        #region ObterAsync
-        public async Task<IEnumerable<Formulario>> ObterAsync()
-        {
-            try 
-            { 
-                return await _formularioRepository.ObterAsync(); 
-            }
-            catch (Exception ex) { throw new Exception(ex.Message, ex.InnerException); }
-        }
-
         public async Task<Formulario> ObterAsync(int formularioId)
         {
             try
             {
-                var formulario = await _formularioRepository.ObterAsync(formularioId);
+                var formulario = await _formularioRepository.GetFullAsync(formularioId);
                 if (formulario == null)
                     throw new ServiceException($"Formulário com Id = {formularioId} não foi encontrado");
                 return formulario;
@@ -112,6 +88,11 @@ namespace Seguranca.Service
 
                 if (formulario.CreatedSystem) throw new ServiceException(
                     $"O formulário {formulario.Nome} foi criado pelo sistema. Exclusão inválida!");
+
+                if (formulario.RestricoesUsuario.Count != 0 || formulario.RestricoesPerfil.Count != 0 ||
+                    formulario.ModulosFormulario.Count != 0 || formulario.FormulariosEvento.Count != 0)
+                    throw new ServiceException(
+                        $"O formulário {formulario.Nome} está em uso. Exclusão inválida!");
 
                 _formularioRepository.Remove(formulario);
                 await _formularioRepository.UnitOfWork.SaveChangesAsync();

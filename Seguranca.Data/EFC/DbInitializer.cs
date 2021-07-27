@@ -19,7 +19,7 @@ namespace Seguranca.Data.EFC
                 new Evento() { Nome = "Associar Perfil", CreatedSystem = true },
                 new Evento() { Nome = "Associar Restricoes", CreatedSystem = true }
             };
-            context.Evento.AddRange(eventos);
+            context.Eventos.AddRange(eventos);
 
             var formularios = new List<Formulario>() {
                 new Formulario() { Nome = "Evento", CreatedSystem = true },
@@ -28,7 +28,7 @@ namespace Seguranca.Data.EFC
                 new Formulario() { Nome = "Perfil", CreatedSystem = true },
                 new Formulario() { Nome = "Usuario", CreatedSystem = true }
             };
-            context.Formulario.AddRange(formularios);
+            context.Formularios.AddRange(formularios);
             context.SaveChanges();
             
             var f1 = new List<FormularioEvento>() {
@@ -36,7 +36,7 @@ namespace Seguranca.Data.EFC
                 new FormularioEvento() { FormularioId = 1, EventoId = 2,  CreatedSystem = true },
                 new FormularioEvento() { FormularioId = 1, EventoId = 1,  CreatedSystem = true }
             };
-            context.FormularioEvento.AddRange(f1);
+            context.FormulariosEvento.AddRange(f1);
             context.SaveChanges();
 
             var f2 = new List<FormularioEvento>() {
@@ -45,7 +45,7 @@ namespace Seguranca.Data.EFC
                 new FormularioEvento() { FormularioId = 2, EventoId = 2,  CreatedSystem = true },
                 new FormularioEvento() { FormularioId = 2, EventoId = 1,  CreatedSystem = true }
             };
-            context.FormularioEvento.AddRange(f2);
+            context.FormulariosEvento.AddRange(f2);
             context.SaveChanges();
 
             var f3 = new List<FormularioEvento>() {
@@ -54,7 +54,7 @@ namespace Seguranca.Data.EFC
                 new FormularioEvento() { FormularioId = 3, EventoId = 2,  CreatedSystem = true },
                 new FormularioEvento() { FormularioId = 3, EventoId = 1,  CreatedSystem = true }
             };
-            context.FormularioEvento.AddRange(f3);
+            context.FormulariosEvento.AddRange(f3);
             context.SaveChanges();
 
             var f4 = new List<FormularioEvento>() {
@@ -63,17 +63,17 @@ namespace Seguranca.Data.EFC
                 new FormularioEvento() { FormularioId = 4, EventoId = 2,  CreatedSystem = true },
                 new FormularioEvento() { FormularioId = 4, EventoId = 1,  CreatedSystem = true }
             };
-            context.FormularioEvento.AddRange(f4);
+            context.FormulariosEvento.AddRange(f4);
             context.SaveChanges();
 
             var f5 = new List<FormularioEvento>() {
                 new FormularioEvento() { FormularioId = 5, EventoId = 7,  CreatedSystem = true },
                 new FormularioEvento() { FormularioId = 5, EventoId = 6,  CreatedSystem = true }
             };
-            context.FormularioEvento.AddRange(f5);
+            context.FormulariosEvento.AddRange(f5);
             context.SaveChanges();
 
-            context.Modulo.Add(new Modulo() {
+            context.Modulos.Add(new Modulo() {
                 Nome = "SegurancaNet", Descricao = "Sistema de Segurança", CreatedSystem = true
             });
             context.SaveChanges();
@@ -85,7 +85,7 @@ namespace Seguranca.Data.EFC
                 new ModuloFormulario() { ModuloId = 1, FormularioId = 2, CreatedSystem = true },
                 new ModuloFormulario() { ModuloId = 1, FormularioId = 1, CreatedSystem = true },
             };
-            context.ModuloFormulario.AddRange(mf);
+            context.ModulosFormulario.AddRange(mf);
             context.SaveChanges();
 
             var funcoes = new List<Funcao>() {
@@ -100,13 +100,13 @@ namespace Seguranca.Data.EFC
                 new Funcao() { Nome = "Diretoria", CreatedSystem = true },
                 new Funcao() { Nome = "Presidência", CreatedSystem = true }
             };
-            context.Funcao.AddRange(funcoes);
+            context.Funcoes.AddRange(funcoes);
 
             var perfis = new List<Perfil>() {
                 new Perfil() { Nome = "Sem Perfil", FuncaoId = (int)EFuncao.Aprendiz, CreatedSystem = true },
                 new Perfil() { Nome = "Master", FuncaoId = (int)EFuncao.Presidência, CreatedSystem = true }
             };
-            context.Perfil.AddRange(perfis);
+            context.Perfis.AddRange(perfis);
             context.SaveChanges();
         }
     }

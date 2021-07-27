@@ -14,13 +14,13 @@ namespace Seguranca.Data.EFC.Tables
                 .IsUnique();
 
             builder.HasOne(d => d.Evento)
-                .WithMany(p => p.FormularioEvento)
+                .WithMany(p => p.FormulariosEvento)
                 .HasForeignKey(d => d.EventoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_FormularioEvento_Evento");
 
             builder.HasOne(d => d.Formulario)
-                .WithMany(p => p.FormularioEvento)
+                .WithMany(p => p.FormulariosEvento)
                 .HasForeignKey(d => d.FormularioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_FormularioEvento_Formulario");

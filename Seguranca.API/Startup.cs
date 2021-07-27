@@ -31,12 +31,12 @@ namespace Seguranca.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // injeção dependência DBContext
+            //Injeção dependência DBContext
             services.AddDbContext<SegurancaContextEFC>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SegurancaConnection")));
 
-            // injeção dependência Services
+            //Injeção dependência Services
             services.AddScoped<SegurancaContextEFC>();
             services.AddTransient<IEventoRepository, EventoRepositoryEFC>();
             services.AddTransient<IEventoService, EventoService>();
@@ -75,16 +75,17 @@ namespace Seguranca.API
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            // injeção dependência mappers
+            //Injeção dependência mappers
             services.AddAutoMapper(typeof(Startup).Assembly);
 
-            //injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
+            //Injeção de dependência NewsoftJson - Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers()
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                     .AddNewtonsoftJson(options => options.SerializerSettings.NullValueHandling =
                         Newtonsoft.Json.NullValueHandling.Ignore);
 
+            //Authentication JwtBearer
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

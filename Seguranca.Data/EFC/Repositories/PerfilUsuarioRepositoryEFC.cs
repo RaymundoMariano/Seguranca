@@ -14,7 +14,7 @@ namespace Seguranca.Data.EFC.Repositories
         #region ObterAsync
         public async Task<PerfilUsuario> ObterAsync(int usuarioId, int? moduloId)
         {
-            return await _segurancaContext.PerfilUsuario.FirstOrDefaultAsync(pu =>
+            return await _segurancaContext.PerfisUsuario.FirstOrDefaultAsync(pu =>
                 pu.UsuarioId == usuarioId &&
                 pu.ModuloId == moduloId);
         }

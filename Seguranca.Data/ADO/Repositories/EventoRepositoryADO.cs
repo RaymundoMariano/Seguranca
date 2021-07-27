@@ -119,5 +119,15 @@ namespace Seguranca.Data.ADO.Repositories
             }
             return eventos;
         }
+
+        public Task<IEnumerable<Evento>> GetFullAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Evento> GetFullAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

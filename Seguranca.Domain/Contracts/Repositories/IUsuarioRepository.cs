@@ -7,8 +7,6 @@ namespace Seguranca.Domain.Contracts.Repositories
 {
     public interface IUsuarioRepository : IUnit
     {
-        Task<IEnumerable<Usuario>> ObterAsync();
-        Task<Usuario> ObterAsync(int id);
         Task<Usuario> ObterAsync(string email);
         Task<IEnumerable<Usuario>> GetFullAsync();
         Task<Usuario> GetFullAsync(int id);
